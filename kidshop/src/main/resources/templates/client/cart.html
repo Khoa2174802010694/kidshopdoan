@@ -66,7 +66,13 @@
             transition: all 0.4s ease; border: 1px solid transparent;
         }
         .cart-item:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(255, 107, 107, 0.1); border-color: var(--soft-pink); }
-        .product-img { width: 120px; height: 120px; object-fit: cover; border-radius: 25px; }
+        .product-img {
+            width: 100%;
+            max-width: 120px;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 20px;
+        }
 
         /* --- QUANTITY CONTROL --- */
         .qty-group { display: flex; align-items: center; background: #f8f9fa; padding: 8px; border-radius: 20px; }
@@ -143,7 +149,10 @@
                 </div>
 
                 <div th:each="item : ${cartItems}" class="cart-item">
-                    <img th:src="@{${item.product.image != null ? '/uploads/' + item.product.image : 'https://placehold.co/400x400'}}" class="product-img shadow-sm">
+                    <div class="cart-img-wrapper">
+                        <img th:src="@{${item.product.image != null ? '/uploads/' + item.product.image : 'https://placehold.co/400x400'}}"
+                             class="product-img shadow-sm">
+                    </div>
 
                     <div class="info">
                         <h5 class="fw-bold mb-1" th:text="${item.product.name}">Tên sản phẩm</h5>
