@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giỏ hàng & Thanh toán | Fashion Kids Premium</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --primary-pink: #ff6b6b;
+            --soft-pink: #fff5f6;
+            --deep-pink: #ee5253;
+            --bg-body: #fffafa;
+            --text-main: #2d3436;
+            --glass: rgba(255, 255, 255, 0.9);
+        }
+
+        body {
+            background-color: var(--bg-body);
+            font-family: 'Quicksand', sans-serif;
+            color: var(--text-main);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* --- CUSTOM SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: var(--primary-pink); border-radius: 10px; }
+
+        .cart-container { max-width: 1200px; margin: 40px auto 100px; }
+
+        /* --- STEPPER UI --- */
+        .step-container { display: flex; justify-content: center; align-items: center; margin-bottom: 60px; padding: 20px; }
+        .step { display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1; }
+        .step-icon {
+            width: 55px; height: 55px; border-radius: 50%; background: white; border: 2px solid #eee;
+            display: flex; align-items: center; justify-content: center; font-weight: 700; color: #b2bec3;
+            transition: 0.4s; margin-bottom: 12px; font-size: 1.2rem;
+        }
+        .step.active .step-icon {
+            background: var(--primary-pink); border-color: var(--primary-pink); color: white;
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+        }
+        .step-line { width: 100px; height: 3px; background: #eee; margin: 0 20px; margin-top: -30px; border-radius: 10px; }
+        .step-text { font-size: 0.85rem; font-weight: 700; color: #b2bec3; transition: 0.3s; }
+        .step.active .step-text { color: var(--primary-pink); }
+
+        /* --- GLASS CARD --- */
+        .glass-card {
+            background: var(--glass); backdrop-filter: blur(15px); border-radius: 35px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05); border: 1px solid rgba(255, 255, 255, 0.8);
+            padding: 40px; position: relative;
+        }
+
+        /* --- CART ITEMS --- */
+        .cart-item {
+            display: grid; grid-template-columns: 120px 1fr auto auto auto; align-items: center;
+            gap: 25px; padding: 20px; margin-bottom: 20px; background: white; border-radius: 30px;
+            transition: all 0.4s ease; border: 1px solid transparent;
+        }
+        .cart-item:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(255, 107, 107, 0.1); border-color: var(--soft-pink); }
+        .product-img { width: 120px; height: 120px; object-fit: cover; border-radius: 25px; }
+
+        /* --- QUANTITY CONTROL --- */
+        .qty-group { display: flex; align-items: center; background: #f8f9fa; padding: 8px; border-radius: 20px; }
+        .qty-btn {
+            width: 35px; height: 35px; border-radius: 15px; background: white; color: var(--primary-pink);
+            display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05); border: none;
+        }
+        .qty-btn:hover { background: var(--primary-pink); color: white; transform: scale(1.1); }
+
+        /* --- BUTTONS --- */
+        .btn-checkout {
+            background: linear-gradient(135deg, var(--primary-pink), var(--deep-pink));
+            border: none; color: white; padding: 18px; border-radius: 25px; font-weight: 700; width: 100%;
+            transition: 0.4s; box-shadow: 0 10px 20px rgba(255, 107, 107, 0.2);
+        }
+        .btn-checkout:hover:not([disabled]) { box-shadow: 0 15px 35px rgba(255, 107, 107, 0.4); transform: translateY(-3px); }
+        .btn-checkout:disabled { background: #dfe6e9; box-shadow: none; }
+
+        .custom-input {
+            border-radius: 20px; border: 2px solid #f1f3f5; padding: 12px 20px; background: #f8f9fa; transition: 0.3s;
+        }
+        .custom-input:focus { background: white; border-color: var(--primary-pink); box-shadow: 0 10px 20px rgba(255, 107, 107, 0.05); outline: none; }
+
+        /* --- MODAL --- */
+        .modal-content { border-radius: 40px; border: none; box-shadow: 0 40px 100px rgba(0,0,0,0.2); }
+        .modal-header { border-bottom: 1px solid #f8f9fa; padding: 30px 40px 10px; }
+        .modal-body { padding: 20px 40px 40px; }
+
+        @media (max-width: 991px) {
+            .cart-item { grid-template-columns: 100px 1fr; }
+            .qty-group { grid-column: span 2; width: fit-content; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container cart-container animate__animated animate__fadeIn">
+
+    <div class="step-container d-none d-md-flex">
+        <div class="step active">
+            <div class="step-icon"><i class="fa-solid fa-cart-shopping"></i></div>
+            <div class="step-text">Giỏ hàng của bé</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+            <div class="step-icon">2</div>
+            <div class="step-text">Thông tin giao nhận</div>
+        </div>
+        <div class="step-line"></div>
+        <div class="step">
+            <div class="step-icon">3</div>
+            <div class="step-text">Hoàn tất đơn hàng</div>
+        </div>
+    </div>
+
+    <div class="mb-5 d-flex align-items-center justify-content-between">
+        <a th:href="@{/client/index}" class="text-decoration-none fw-bold" style="color: var(--primary-pink);">
+            <i class="fa-solid fa-chevron-left me-2"></i> Quay lại cửa hàng
+        </a>
+        <h2 class="fw-bold m-0" style="color: var(--text-main); font-family: 'Dancing Script', cursive; font-size: 2.5rem;">
+            Giỏ hàng của <span style="color: var(--primary-pink);">Bé Yêu</span>
+        </h2>
+    </div>
+
+    <div class="row g-4 g-xl-5">
+        <div class="col-lg-8">
+            <div class="glass-card animate__animated animate__fadeInLeft">
+                <div th:if="${#lists.isEmpty(cartItems)}" class="text-center py-5">
+                    <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" width="150" class="mb-4 opacity-50">
+                    <h3 class="fw-bold text-muted">Giỏ hàng đang đợi bé...</h3>
+                    <p class="text-secondary mb-5">Hàng ngàn mẫu quần áo xinh xắn đang chờ mẹ sắm đó!</p>
+                    <a th:href="@{/client/index}" class="btn-checkout d-inline-block px-5 w-auto text-decoration-none">Sắm Đồ Ngay</a>
+                </div>
+
+                <div th:each="item : ${cartItems}" class="cart-item">
+                    <img th:src="@{${item.product.image != null ? '/uploads/' + item.product.image : 'https://placehold.co/400x400'}}" class="product-img shadow-sm">
+
+                    <div class="info">
+                        <h5 class="fw-bold mb-1" th:text="${item.product.name}">Tên sản phẩm</h5>
+                        <p class="small text-muted mb-2">Mã sản phẩm: <span th:text="'FK-' + ${item.product.id}"></span></p>
+                        <span class="badge rounded-pill px-3 py-2" style="background: var(--soft-pink); color: var(--primary-pink); font-weight: 700;"
+                              th:text="${#numbers.formatDecimal(item.product.price, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
+                    </div>
+
+                    <div class="qty-group shadow-sm">
+                        <a th:href="@{/client/cart/update(id=${item.product.id}, action='decrease')}" class="qty-btn">
+                            <i class="fa-solid fa-minus"></i>
+                        </a>
+                        <span class="mx-3 fw-bold fs-5" th:text="${item.quantity}">1</span>
+                        <a th:href="@{/client/cart/update(id=${item.product.id}, action='increase')}" class="qty-btn">
+                            <i class="fa-solid fa-plus"></i>
+                        </a>
+                    </div>
+
+                    <div class="text-end" style="min-width: 130px;">
+                        <span class="fw-bold fs-5" style="color: var(--primary-pink);"
+                              th:text="${#numbers.formatDecimal(item.product.price * item.quantity, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
+                    </div>
+
+                    <a th:href="@{/client/cart/remove/{id}(id=${item.product.id})}"
+                       class="btn btn-outline-danger border-0 rounded-circle shadow-sm"
+                       onclick="return confirm('Gỡ món này khỏi giỏ hàng?')">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="sticky-top animate__animated animate__fadeInRight" style="top: 100px; z-index: 5;">
+                <div class="glass-card">
+                    <h4 class="fw-bold mb-4">Tổng Đơn Hàng</h4>
+
+                    <form th:action="@{/client/cart/apply-coupon}" method="post" class="mb-4">
+                        <label class="small fw-bold text-muted mb-2">MÃ GIẢM GIÁ (NẾU CÓ)</label>
+                        <div class="d-flex gap-2">
+                            <input type="text" name="couponCode" class="form-control custom-input" placeholder="Nhập mã...">
+                            <button class="btn btn-dark rounded-pill px-3 fw-bold shadow-sm">ÁP DỤNG</button>
+                        </div>
+                        <div th:if="${couponError}" class="text-danger mt-2 small animate__animated animate__shakeX" th:text="${couponError}"></div>
+                    </form>
+
+                    <div class="p-4 rounded-4 mb-4" style="background: #f8f9fa;">
+                        <div class="d-flex justify-content-between mb-3">
+                            <span class="text-muted">Tạm tính</span>
+                            <span class="fw-bold" th:text="${#numbers.formatDecimal(totalPrice, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3 text-danger" th:if="${discountAmount > 0}">
+                            <span>Giảm giá</span>
+                            <span class="fw-bold" th:text="'-' + ${#numbers.formatDecimal(discountAmount, 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3 text-success">
+                            <span>Phí vận chuyển</span>
+                            <span class="fw-bold">MIỄN PHÍ</span>
+                        </div>
+                        <hr class="opacity-10">
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <span class="fw-bold">THÀNH TIỀN</span>
+                            <h3 class="fw-bold m-0" style="color: var(--primary-pink);"
+                                th:text="${#numbers.formatDecimal(totalPrice - (discountAmount ?: 0), 0, 'COMMA', 0, 'POINT')} + '₫'"></h3>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn-checkout py-3" th:disabled="${#lists.isEmpty(cartItems)}"
+                            data-bs-toggle="modal" data-bs-target="#checkoutModal">
+                        XÁC NHẬN THANH TOÁN <i class="fa-solid fa-arrow-right ms-2"></i>
+                    </button>
+
+                    <div class="mt-4 text-center">
+                        <p class="small text-muted mb-3">Hỗ trợ thanh toán an toàn</p>
+                        <div class="d-flex justify-content-center gap-3 fs-3 text-muted">
+                            <i class="fa-brands fa-cc-visa"></i>
+                            <i class="fa-brands fa-cc-mastercard"></i>
+                            <i class="fa-solid fa-wallet"></i>
+                            <i class="fa-solid fa-building-columns"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="checkoutModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content animate__animated animate__zoomIn">
+            <div class="modal-header">
+                <h4 class="fw-bold m-0" style="color: var(--primary-pink);">Thông Tin Nhận Hàng</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form th:action="@{/client/cart/checkout/submit}" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted mb-2">HỌ TÊN NGƯỜI NHẬN</label>
+                        <input name="customerName" required class="form-control custom-input" placeholder="Tên ba mẹ hoặc bé">
+                    </div>
+                    <div class="mb-3">
+                        <label class="small fw-bold text-muted mb-2">SỐ ĐIỆN THOẠI</label>
+                        <input name="phone" required class="form-control custom-input" placeholder="Dùng để shipper liên hệ">
+                    </div>
+                    <div class="mb-4">
+                        <label class="small fw-bold text-muted mb-2">ĐỊA CHỈ GIAO HÀNG</label>
+                        <textarea name="address" required class="form-control custom-input" rows="3" placeholder="Số nhà, tên đường, phường/xã..."></textarea>
+                    </div>
+
+                    <div class="p-3 rounded-4" style="background: var(--soft-pink); border: 1px dashed var(--primary-pink);">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="fw-bold small">TỔNG CẦN THANH TOÁN:</span>
+                            <span class="fw-bold fs-4 text-danger" th:text="${#numbers.formatDecimal(totalPrice - (discountAmount ?: 0), 0, 'COMMA', 0, 'POINT')} + '₫'"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 pt-0">
+                    <button type="submit" class="btn-checkout">ĐẶT HÀNG NGAY (COD)</button>
+                    <p class="text-center small text-muted mt-3 mb-0">Kiểm tra hàng trước khi thanh toán</p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:inline="javascript">
+    window.onload = function() {
+        const successMsg = [[${successMessage}]];
+        const errorMsg = [[${errorMessage}]];
+        const isOrderSuccess = [[${isOrderSuccess}]];
+
+        // Thành công khi đặt hàng
+        if (isOrderSuccess) {
+            Swal.fire({
+                title: 'Đặt hàng thành công! 🎉',
+                text: successMsg || 'Fashion Kids sẽ liên hệ với bạn sớm nhất!',
+                icon: 'success',
+                confirmButtonText: 'Tiếp tục mua sắm',
+                confirmButtonColor: '#ff6b6b',
+                background: '#fffafa',
+                borderRadius: '30px'
+            }).then(() => {
+                window.location.href = '/client/index';
+            });
+        }
+        // Thông báo Toast cho các action khác (áp mã, thêm giỏ...)
+        else if (successMsg) {
+            Swal.fire({
+                toast: true, position: 'top-end', icon: 'success',
+                title: successMsg, showConfirmButton: false, timer: 3000, timerProgressBar: true
+            });
+        }
+
+        if (errorMsg) {
+            Swal.fire({
+                title: 'Có lỗi xảy ra!',
+                text: errorMsg,
+                icon: 'error',
+                confirmButtonColor: '#2d3436',
+                borderRadius: '30px'
+            });
+        }
+    };
+</script>
+</body>
+</html>

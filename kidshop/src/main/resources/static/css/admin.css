@@ -1,0 +1,15 @@
+<style>
+    :root { --pink: #ff9eb5; --blue: #3a86ff; --green: #2ec4b6; }
+    body { font-family: 'Inter', sans-serif; background-color: #f0f2f5; color: #1e293b; }
+    .navbar-brand { font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--pink) !important; }
+    .stat-card { border-radius: 24px; padding: 30px; background: white; border: none; transition: 0.3s; box-shadow: 0 10px 25px rgba(0,0,0,0.02); height: 100%; }
+    .stat-card:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(0,0,0,0.08); }
+    .icon-box { width: 60px; height: 60px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 20px; }
+    .bg-p { background: #ffe4ec; color: var(--pink); }
+    .bg-b { background: #e0f2fe; color: var(--blue); }
+    .bg-g { background: #d1fae5; color: var(--green); }
+    .number-display { font-size: 2.2rem; font-weight: 800; margin-bottom: 5px; }
+    .label-display { color: #64748b; font-weight: 600; font-size: 0.9rem; }
+    .table-card { background: white; border-radius: 24px; padding: 25px; margin-top: 30px; }
+    .status-pill { padding: 5px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
+</style>

@@ -1,0 +1,309 @@
+<html>
+<head>
+<title>HomeController.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+.s4 { color: #6aab73;}
+.s5 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+HomeController.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">com</span><span class="s2">.</span><span class="s1">shop</span><span class="s2">.</span><span class="s1">kidshop</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">shop</span><span class="s2">.</span><span class="s1">kidshop</span><span class="s2">.</span><span class="s1">model</span><span class="s2">.</span><span class="s1">Category</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">shop</span><span class="s2">.</span><span class="s1">kidshop</span><span class="s2">.</span><span class="s1">model</span><span class="s2">.</span><span class="s1">Product</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">shop</span><span class="s2">.</span><span class="s1">kidshop</span><span class="s2">.</span><span class="s1">model</span><span class="s2">.</span><span class="s1">Coupon</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">shop</span><span class="s2">.</span><span class="s1">kidshop</span><span class="s2">.</span><span class="s1">model</span><span class="s2">.</span><span class="s1">Order</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">com</span><span class="s2">.</span><span class="s1">shop</span><span class="s2">.</span><span class="s1">kidshop</span><span class="s2">.</span><span class="s1">service</span><span class="s2">.</span><span class="s1">ProductService</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">beans</span><span class="s2">.</span><span class="s1">factory</span><span class="s2">.</span><span class="s1">annotation</span><span class="s2">.</span><span class="s1">Autowired</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">stereotype</span><span class="s2">.</span><span class="s1">Controller</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">ui</span><span class="s2">.</span><span class="s1">Model</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">springframework</span><span class="s2">.</span><span class="s1">web</span><span class="s2">.</span><span class="s1">bind</span><span class="s2">.</span><span class="s1">annotation</span><span class="s2">.*;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">stream</span><span class="s2">.</span><span class="s1">Collectors</span><span class="s2">;</span>
+
+<span class="s1">@Controller</span>
+<span class="s0">public class </span><span class="s1">HomeController </span><span class="s2">{</span>
+
+    <span class="s3">// ===== GIẢ LẬP DATABASE =====</span>
+    <span class="s0">private static </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Product</span><span class="s2">&gt; </span><span class="s1">listPro </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+    <span class="s0">private static </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Category</span><span class="s2">&gt; </span><span class="s1">listCat </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+    <span class="s0">private static </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Coupon</span><span class="s2">&gt; </span><span class="s1">listCoupon </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+    <span class="s0">private static </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Order</span><span class="s2">&gt; </span><span class="s1">listOrder </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+    <span class="s0">private static </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt;&gt; </span><span class="s1">listUser </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+
+    <span class="s3">// =====  DATA MẪU   =====</span>
+    <span class="s0">static </span><span class="s2">{</span>
+        <span class="s3">// 1. Category</span>
+        <span class="s1">listCat</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Category</span><span class="s2">(</span><span class="s4">&quot;CAT01&quot;</span><span class="s2">, </span><span class="s4">&quot;Váy&quot;</span><span class="s2">));</span>
+        <span class="s1">listCat</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Category</span><span class="s2">(</span><span class="s4">&quot;CAT02&quot;</span><span class="s2">, </span><span class="s4">&quot;Áo&quot;</span><span class="s2">));</span>
+        <span class="s1">listCat</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Category</span><span class="s2">(</span><span class="s4">&quot;CAT03&quot;</span><span class="s2">, </span><span class="s4">&quot;Quần&quot;</span><span class="s2">));</span>
+
+        <span class="s3">// 2. Product (Dữ liệu có ảnh thật để test giao diện)</span>
+        <span class="s1">listPro</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Product</span><span class="s2">(</span><span class="s4">&quot;P01&quot;</span><span class="s2">, </span><span class="s4">&quot;Váy Công Chúa Elsa&quot;</span><span class="s2">, </span><span class="s5">250000.0</span><span class="s2">, </span><span class="s4">&quot;https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=500&quot;</span><span class="s2">, </span><span class="s4">&quot;Váy&quot;</span><span class="s2">, </span><span class="s0">true</span><span class="s2">, </span><span class="s5">45</span><span class="s2">));</span>
+        <span class="s1">listPro</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Product</span><span class="s2">(</span><span class="s4">&quot;P02&quot;</span><span class="s2">, </span><span class="s4">&quot;Áo Thun Cotton Organic&quot;</span><span class="s2">, </span><span class="s5">120000.0</span><span class="s2">, </span><span class="s4">&quot;https://images.unsplash.com/photo-1519278470574-c552e0b74871?w=500&quot;</span><span class="s2">, </span><span class="s4">&quot;Áo&quot;</span><span class="s2">, </span><span class="s0">false</span><span class="s2">, </span><span class="s5">150</span><span class="s2">));</span>
+        <span class="s1">listPro</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Product</span><span class="s2">(</span><span class="s4">&quot;P03&quot;</span><span class="s2">, </span><span class="s4">&quot;Quần Jean Baggy Bé Trai&quot;</span><span class="s2">, </span><span class="s5">185000.0</span><span class="s2">, </span><span class="s4">&quot;https://images.unsplash.com/photo-1519457431-44ccd64a579b?w=500&quot;</span><span class="s2">, </span><span class="s4">&quot;Quần&quot;</span><span class="s2">, </span><span class="s0">true</span><span class="s2">, </span><span class="s5">12</span><span class="s2">));</span>
+        <span class="s1">listPro</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Product</span><span class="s2">(</span><span class="s4">&quot;P04&quot;</span><span class="s2">, </span><span class="s4">&quot;Váy Hoa Nhí Vintage&quot;</span><span class="s2">, </span><span class="s5">210000.0</span><span class="s2">, </span><span class="s4">&quot;https://images.unsplash.com/photo-1503919545889-aef636e10ad4?w=500&quot;</span><span class="s2">, </span><span class="s4">&quot;Váy&quot;</span><span class="s2">, </span><span class="s0">false</span><span class="s2">, </span><span class="s5">320</span><span class="s2">));</span>
+        <span class="s1">listPro</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Product</span><span class="s2">(</span><span class="s4">&quot;P05&quot;</span><span class="s2">, </span><span class="s4">&quot;Áo Sơ Mi Kẻ Caro&quot;</span><span class="s2">, </span><span class="s5">155000.0</span><span class="s2">, </span><span class="s4">&quot;https://images.unsplash.com/photo-1503944583220-79d8926ad5e2?w=500&quot;</span><span class="s2">, </span><span class="s4">&quot;Áo&quot;</span><span class="s2">, </span><span class="s0">true</span><span class="s2">, </span><span class="s5">88</span><span class="s2">));</span>
+        <span class="s1">listPro</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Product</span><span class="s2">(</span><span class="s4">&quot;P06&quot;</span><span class="s2">, </span><span class="s4">&quot;Bộ Đồ Khủng Long Xanh&quot;</span><span class="s2">, </span><span class="s5">195000.0</span><span class="s2">, </span><span class="s4">&quot;https://images.unsplash.com/photo-1522771935876-2497116a4258?w=500&quot;</span><span class="s2">, </span><span class="s4">&quot;Quần&quot;</span><span class="s2">, </span><span class="s0">false</span><span class="s2">, </span><span class="s5">210</span><span class="s2">));</span>
+
+        <span class="s3">// 3. Coupon</span>
+        <span class="s1">listCoupon</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Coupon</span><span class="s2">(</span><span class="s4">&quot;C01&quot;</span><span class="s2">, </span><span class="s4">&quot;GIAM10&quot;</span><span class="s2">, </span><span class="s5">10</span><span class="s2">));</span>
+        <span class="s1">listCoupon</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Coupon</span><span class="s2">(</span><span class="s4">&quot;C02&quot;</span><span class="s2">, </span><span class="s4">&quot;SALE20&quot;</span><span class="s2">, </span><span class="s5">20</span><span class="s2">));</span>
+
+        <span class="s3">// 4. Order</span>
+        <span class="s1">listOrder</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Order</span><span class="s2">(</span><span class="s4">&quot;1001&quot;</span><span class="s2">, </span><span class="s4">&quot;Nguyễn An&quot;</span><span class="s2">, </span><span class="s4">&quot;0905123456&quot;</span><span class="s2">, </span><span class="s4">&quot;2026-03-20&quot;</span><span class="s2">, </span><span class="s5">500000.0</span><span class="s2">, </span><span class="s4">&quot;APPROVED&quot;</span><span class="s2">));</span>
+        <span class="s1">listOrder</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Order</span><span class="s2">(</span><span class="s4">&quot;1002&quot;</span><span class="s2">, </span><span class="s4">&quot;Trần Bình&quot;</span><span class="s2">, </span><span class="s4">&quot;0914222333&quot;</span><span class="s2">, </span><span class="s4">&quot;2026-03-25&quot;</span><span class="s2">, </span><span class="s5">120000.0</span><span class="s2">, </span><span class="s4">&quot;PENDING&quot;</span><span class="s2">));</span>
+        <span class="s1">listOrder</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Order</span><span class="s2">(</span><span class="s4">&quot;1003&quot;</span><span class="s2">, </span><span class="s4">&quot;Lê Chi&quot;</span><span class="s2">, </span><span class="s4">&quot;0888555444&quot;</span><span class="s2">, </span><span class="s4">&quot;2026-03-28&quot;</span><span class="s2">, </span><span class="s5">350000.0</span><span class="s2">, </span><span class="s4">&quot;PENDING&quot;</span><span class="s2">));</span>
+
+        <span class="s3">// 5. User</span>
+    <span class="s2">}</span>
+
+    <span class="s3">// ===== PHẦN SỬA ĐỂ CHẠY ĐƯỢC =====</span>
+
+    <span class="s1">@Autowired</span><span class="s2">(</span><span class="s1">required </span><span class="s2">= </span><span class="s0">false</span><span class="s2">) </span><span class="s3">// QUAN TRỌNG: required = false để không bị sập app khi ProductService lỗi</span>
+    <span class="s0">private </span><span class="s1">ProductService productService</span><span class="s2">;</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/client/index&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String index</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s4">&quot;client/index&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">// ===== CÁC TRANG CLIENT KHÁC =====</span>
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/client/cart&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String showCart</span><span class="s2">(</span><span class="s1">Model model</span><span class="s2">) {</span>
+        <span class="s3">// 1. Tạo danh sách sản phẩm giả để hiển thị giao diện</span>
+        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">Object</span><span class="s2">&gt;&gt; </span><span class="s1">cartItems </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;();</span>
+
+        <span class="s3">// Thêm sản phẩm 1</span>
+        <span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">Object</span><span class="s2">&gt; </span><span class="s1">item1 </span><span class="s2">= </span><span class="s0">new </span><span class="s1">HashMap</span><span class="s2">&lt;&gt;();</span>
+        <span class="s1">item1</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s4">&quot;id&quot;</span><span class="s2">, </span><span class="s5">1</span><span class="s2">);</span>
+        <span class="s1">item1</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s4">&quot;name&quot;</span><span class="s2">, </span><span class="s4">&quot;Gấu bông hồng Cute&quot;</span><span class="s2">);</span>
+        <span class="s1">item1</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s4">&quot;price&quot;</span><span class="s2">, </span><span class="s5">250000</span><span class="s2">);</span>
+        <span class="s1">item1</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s4">&quot;qty&quot;</span><span class="s2">, </span><span class="s5">2</span><span class="s2">);</span>
+        <span class="s1">item1</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s4">&quot;image&quot;</span><span class="s2">, </span><span class="s4">&quot;https://placehold.co/100x100&quot;</span><span class="s2">);</span>
+        <span class="s1">cartItems</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">item1</span><span class="s2">);</span>
+
+        <span class="s3">// 2. Tính tổng tiền</span>
+        <span class="s0">long </span><span class="s1">totalPrice </span><span class="s2">= </span><span class="s5">500000</span><span class="s2">;</span>
+
+        <span class="s3">// 3. Gửi dữ liệu sang HTML - PHẢI TRÙNG TÊN VỚI BIẾN TRONG HTML</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;cartItems&quot;</span><span class="s2">, </span><span class="s1">cartItems</span><span class="s2">);</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;totalPrice&quot;</span><span class="s2">, </span><span class="s1">totalPrice</span><span class="s2">);</span>
+
+        <span class="s0">return </span><span class="s4">&quot;client/cart&quot;</span><span class="s2">; </span><span class="s3">// Trả về file HTML của em</span>
+    <span class="s2">}</span>
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/cart/update&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String updateCart</span><span class="s2">(</span><span class="s1">@RequestParam</span><span class="s2">(</span><span class="s4">&quot;id&quot;</span><span class="s2">) </span><span class="s1">Integer id</span><span class="s2">,</span>
+                             <span class="s1">@RequestParam</span><span class="s2">(</span><span class="s4">&quot;action&quot;</span><span class="s2">) </span><span class="s1">String action</span><span class="s2">) {</span>
+        <span class="s3">// Logic: Tìm sản phẩm trong giỏ hàng và tăng hoặc giảm qty</span>
+        <span class="s3">// Sau khi xử lý xong, chuyển hướng quay lại trang giỏ hàng</span>
+        <span class="s0">return </span><span class="s4">&quot;redirect:/client/cart&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/cart/remove/{id}&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String removeFromCart</span><span class="s2">(</span><span class="s1">@PathVariable</span><span class="s2">(</span><span class="s4">&quot;id&quot;</span><span class="s2">) </span><span class="s1">Integer id</span><span class="s2">) {</span>
+        <span class="s3">// Logic: Xóa sản phẩm khỏi danh sách</span>
+        <span class="s0">return </span><span class="s4">&quot;redirect:/client/cart&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s1">@PostMapping</span><span class="s2">(</span><span class="s4">&quot;/checkout/submit&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String submit</span><span class="s2">() {</span>
+    <span class="s3">// Logic: Thanh toán, lưu hóa đơn vào database...</span>
+    <span class="s0">return </span><span class="s4">&quot;redirect:/client/index&quot;</span><span class="s2">; </span><span class="s3">// Đặt xong về trang chủ</span>
+    <span class="s2">}</span>
+    <span class="s1">@PostMapping</span><span class="s2">(</span><span class="s4">&quot;/cart/checkout&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String checkout</span><span class="s2">() {</span>
+        <span class="s3">// Logic: Thanh toán, lưu hóa đơn vào database...</span>
+
+        <span class="s0">return </span><span class="s4">&quot;redirect:/client/index&quot;</span><span class="s2">; </span><span class="s3">// Đặt xong về trang chủ</span>
+    <span class="s2">}</span>
+    <span class="s1">@PostMapping</span><span class="s2">(</span><span class="s4">&quot;/cart/apply-coupon&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String applycoupon</span><span class="s2">() {</span>
+        <span class="s3">// Logic: Thanh toán, lưu hóa đơn vào database...</span>
+        <span class="s0">return </span><span class="s4">&quot;redirect:/client/cart&quot;</span><span class="s2">; </span><span class="s3">// Đặt xong về trang chủ</span>
+    <span class="s2">}</span>
+
+
+
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/client/detail&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String detail</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s4">&quot;client/detail&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+
+    <span class="s3">// ===== ADMIN: DASHBOARD =====</span>
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/dashboard&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String adminDashboard</span><span class="s2">(</span><span class="s1">Model model</span><span class="s2">) {</span>
+        <span class="s0">double </span><span class="s1">totalRevenue </span><span class="s2">= </span><span class="s1">listOrder</span><span class="s2">.</span><span class="s1">stream</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">filter</span><span class="s2">(</span><span class="s1">o -&gt; </span><span class="s4">&quot;APPROVED&quot;</span><span class="s2">.</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">o</span><span class="s2">.</span><span class="s1">getStatus</span><span class="s2">()))</span>
+                <span class="s2">.</span><span class="s1">mapToDouble</span><span class="s2">(</span><span class="s1">Order::getTotal</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">sum</span><span class="s2">();</span>
+
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;totalProducts&quot;</span><span class="s2">, </span><span class="s1">listPro</span><span class="s2">.</span><span class="s1">size</span><span class="s2">());</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;totalOrders&quot;</span><span class="s2">, </span><span class="s1">listOrder</span><span class="s2">.</span><span class="s1">size</span><span class="s2">());</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;revenue&quot;</span><span class="s2">, </span><span class="s1">totalRevenue</span><span class="s2">);</span>
+
+        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Order</span><span class="s2">&gt; </span><span class="s1">recent </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;(</span><span class="s1">listOrder</span><span class="s2">);</span>
+        <span class="s1">Collections</span><span class="s2">.</span><span class="s1">reverse</span><span class="s2">(</span><span class="s1">recent</span><span class="s2">);</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;recentOrders&quot;</span><span class="s2">, </span><span class="s1">recent</span><span class="s2">.</span><span class="s1">stream</span><span class="s2">().</span><span class="s1">limit</span><span class="s2">(</span><span class="s5">5</span><span class="s2">).</span><span class="s1">collect</span><span class="s2">(</span><span class="s1">Collectors</span><span class="s2">.</span><span class="s1">toList</span><span class="s2">()));</span>
+
+        <span class="s0">return </span><span class="s4">&quot;admin/dashboard&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">// ===== ADMIN: ORDER MANAGEMENT =====</span>
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/orders&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String adminOrders</span><span class="s2">(</span><span class="s1">Model model</span><span class="s2">) {</span>
+        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Order</span><span class="s2">&gt; </span><span class="s1">allOrders </span><span class="s2">= </span><span class="s0">new </span><span class="s1">ArrayList</span><span class="s2">&lt;&gt;(</span><span class="s1">listOrder</span><span class="s2">);</span>
+        <span class="s1">Collections</span><span class="s2">.</span><span class="s1">reverse</span><span class="s2">(</span><span class="s1">allOrders</span><span class="s2">);</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;orders&quot;</span><span class="s2">, </span><span class="s1">allOrders</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s4">&quot;admin/orders&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/orders/update&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String updateOrderStatus</span><span class="s2">(</span><span class="s1">@RequestParam</span><span class="s2">(</span><span class="s4">&quot;id&quot;</span><span class="s2">) </span><span class="s1">String id</span><span class="s2">, </span><span class="s1">@RequestParam</span><span class="s2">(</span><span class="s4">&quot;status&quot;</span><span class="s2">) </span><span class="s1">String status</span><span class="s2">) {</span>
+        <span class="s1">listOrder</span><span class="s2">.</span><span class="s1">stream</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">filter</span><span class="s2">(</span><span class="s1">o -&gt; o</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">().</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">id</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">findFirst</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">ifPresent</span><span class="s2">(</span><span class="s1">o -&gt; o</span><span class="s2">.</span><span class="s1">setStatus</span><span class="s2">(</span><span class="s1">status</span><span class="s2">));</span>
+        <span class="s0">return </span><span class="s4">&quot;redirect:/admin/orders&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">// ===== ADMIN: CATEGORY =====</span>
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/category&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String adminCategory</span><span class="s2">(</span><span class="s1">Model model</span><span class="s2">) {</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;category&quot;</span><span class="s2">, </span><span class="s0">new </span><span class="s1">Category</span><span class="s2">());</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;categories&quot;</span><span class="s2">, </span><span class="s1">listCat</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s4">&quot;admin/category&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@PostMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/category/save&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String saveCategory</span><span class="s2">(</span><span class="s1">@ModelAttribute</span><span class="s2">(</span><span class="s4">&quot;category&quot;</span><span class="s2">) </span><span class="s1">Category cat</span><span class="s2">) {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">cat</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">() == </span><span class="s0">null </span><span class="s2">|| </span><span class="s1">cat</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">().</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s1">cat</span><span class="s2">.</span><span class="s1">setId</span><span class="s2">(</span><span class="s4">&quot;CAT-&quot; </span><span class="s2">+ </span><span class="s1">UUID</span><span class="s2">.</span><span class="s1">randomUUID</span><span class="s2">().</span><span class="s1">toString</span><span class="s2">().</span><span class="s1">substring</span><span class="s2">(</span><span class="s5">0</span><span class="s2">, </span><span class="s5">4</span><span class="s2">).</span><span class="s1">toUpperCase</span><span class="s2">());</span>
+            <span class="s1">listCat</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">cat</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">listCat</span><span class="s2">.</span><span class="s1">removeIf</span><span class="s2">(</span><span class="s1">c -&gt; c</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">().</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">cat</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">()));</span>
+            <span class="s1">listCat</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">cat</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s0">return </span><span class="s4">&quot;redirect:/admin/category&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/category/edit/{id}&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String editCategory</span><span class="s2">(</span><span class="s1">@PathVariable String id</span><span class="s2">, </span><span class="s1">Model model</span><span class="s2">) {</span>
+        <span class="s1">Category found </span><span class="s2">= </span><span class="s1">listCat</span><span class="s2">.</span><span class="s1">stream</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">filter</span><span class="s2">(</span><span class="s1">c -&gt; c</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">().</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">id</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">findFirst</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">orElse</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Category</span><span class="s2">());</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;category&quot;</span><span class="s2">, </span><span class="s1">found</span><span class="s2">);</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;categories&quot;</span><span class="s2">, </span><span class="s1">listCat</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s4">&quot;admin/category&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/category/delete/{id}&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String deleteCategory</span><span class="s2">(</span><span class="s1">@PathVariable String id</span><span class="s2">) {</span>
+        <span class="s1">listCat</span><span class="s2">.</span><span class="s1">removeIf</span><span class="s2">(</span><span class="s1">c -&gt; c</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">().</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">id</span><span class="s2">));</span>
+        <span class="s0">return </span><span class="s4">&quot;redirect:/admin/category&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">// ===== ADMIN: PRODUCT =====</span>
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/product&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String adminProduct</span><span class="s2">(</span><span class="s1">Model model</span><span class="s2">) {</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;product&quot;</span><span class="s2">, </span><span class="s0">new </span><span class="s1">Product</span><span class="s2">());</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;products&quot;</span><span class="s2">, </span><span class="s1">listPro</span><span class="s2">);</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;categories&quot;</span><span class="s2">, </span><span class="s1">listCat</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s4">&quot;admin/product&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@PostMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/products/save&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String saveProduct</span><span class="s2">(</span><span class="s1">@ModelAttribute</span><span class="s2">(</span><span class="s4">&quot;product&quot;</span><span class="s2">) </span><span class="s1">Product p</span><span class="s2">) {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">p</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">() == </span><span class="s0">null </span><span class="s2">|| </span><span class="s1">p</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">().</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s1">p</span><span class="s2">.</span><span class="s1">setId</span><span class="s2">(</span><span class="s4">&quot;P&quot; </span><span class="s2">+ (</span><span class="s1">listPro</span><span class="s2">.</span><span class="s1">size</span><span class="s2">() + </span><span class="s5">1</span><span class="s2">));</span>
+            <span class="s1">listPro</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">p</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">listPro</span><span class="s2">.</span><span class="s1">removeIf</span><span class="s2">(</span><span class="s1">prod -&gt; prod</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">().</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">p</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">()));</span>
+            <span class="s1">listPro</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">p</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s0">return </span><span class="s4">&quot;redirect:/admin/product&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/products/edit/{id}&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String editProduct</span><span class="s2">(</span><span class="s1">@PathVariable String id</span><span class="s2">, </span><span class="s1">Model model</span><span class="s2">) {</span>
+        <span class="s1">Product found </span><span class="s2">= </span><span class="s1">listPro</span><span class="s2">.</span><span class="s1">stream</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">filter</span><span class="s2">(</span><span class="s1">p -&gt; p</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">().</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">id</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">findFirst</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">orElse</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Product</span><span class="s2">());</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;product&quot;</span><span class="s2">, </span><span class="s1">found</span><span class="s2">);</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;products&quot;</span><span class="s2">, </span><span class="s1">listPro</span><span class="s2">);</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;categories&quot;</span><span class="s2">, </span><span class="s1">listCat</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s4">&quot;admin/product&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/products/delete/{id}&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String deleteProduct</span><span class="s2">(</span><span class="s1">@PathVariable String id</span><span class="s2">) {</span>
+        <span class="s1">listPro</span><span class="s2">.</span><span class="s1">removeIf</span><span class="s2">(</span><span class="s1">p -&gt; p</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">().</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">id</span><span class="s2">));</span>
+        <span class="s0">return </span><span class="s4">&quot;redirect:/admin/product&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">// ===== ADMIN: COUPON =====</span>
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/coupon&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String adminCoupon</span><span class="s2">(</span><span class="s1">Model model</span><span class="s2">) {</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;coupon&quot;</span><span class="s2">, </span><span class="s0">new </span><span class="s1">Coupon</span><span class="s2">());</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;coupons&quot;</span><span class="s2">, </span><span class="s1">listCoupon</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s4">&quot;admin/coupon&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@PostMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/coupon/save&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String saveCoupon</span><span class="s2">(</span><span class="s1">@ModelAttribute</span><span class="s2">(</span><span class="s4">&quot;coupon&quot;</span><span class="s2">) </span><span class="s1">Coupon c</span><span class="s2">) {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">c</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">() == </span><span class="s0">null </span><span class="s2">|| </span><span class="s1">c</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">().</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s1">c</span><span class="s2">.</span><span class="s1">setId</span><span class="s2">(</span><span class="s4">&quot;C&quot; </span><span class="s2">+ (</span><span class="s1">listCoupon</span><span class="s2">.</span><span class="s1">size</span><span class="s2">() + </span><span class="s5">1</span><span class="s2">));</span>
+            <span class="s1">listCoupon</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">c</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">listCoupon</span><span class="s2">.</span><span class="s1">removeIf</span><span class="s2">(</span><span class="s1">x -&gt; x</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">().</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">c</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">()));</span>
+            <span class="s1">listCoupon</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">c</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s0">return </span><span class="s4">&quot;redirect:/admin/coupon&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/coupon/edit/{id}&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String editCoupon</span><span class="s2">(</span><span class="s1">@PathVariable String id</span><span class="s2">, </span><span class="s1">Model model</span><span class="s2">) {</span>
+        <span class="s1">Coupon found </span><span class="s2">= </span><span class="s1">listCoupon</span><span class="s2">.</span><span class="s1">stream</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">filter</span><span class="s2">(</span><span class="s1">c -&gt; c</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">().</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">id</span><span class="s2">))</span>
+                <span class="s2">.</span><span class="s1">findFirst</span><span class="s2">()</span>
+                <span class="s2">.</span><span class="s1">orElse</span><span class="s2">(</span><span class="s0">new </span><span class="s1">Coupon</span><span class="s2">());</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;coupon&quot;</span><span class="s2">, </span><span class="s1">found</span><span class="s2">);</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;coupons&quot;</span><span class="s2">, </span><span class="s1">listCoupon</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s4">&quot;admin/coupon&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/coupon/delete/{id}&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String deleteCoupon</span><span class="s2">(</span><span class="s1">@PathVariable String id</span><span class="s2">) {</span>
+        <span class="s1">listCoupon</span><span class="s2">.</span><span class="s1">removeIf</span><span class="s2">(</span><span class="s1">c -&gt; c</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">().</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">id</span><span class="s2">));</span>
+        <span class="s0">return </span><span class="s4">&quot;redirect:/admin/coupon&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">// ===== ADMIN: USER =====</span>
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/customer&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String adminUser</span><span class="s2">(</span><span class="s1">Model model</span><span class="s2">) {</span>
+        <span class="s1">model</span><span class="s2">.</span><span class="s1">addAttribute</span><span class="s2">(</span><span class="s4">&quot;users&quot;</span><span class="s2">, </span><span class="s1">listUser</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s4">&quot;admin/customer&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@GetMapping</span><span class="s2">(</span><span class="s4">&quot;/admin/customer/delete/{id}&quot;</span><span class="s2">)</span>
+    <span class="s0">public </span><span class="s1">String deleteUser</span><span class="s2">(</span><span class="s1">@PathVariable String id</span><span class="s2">) {</span>
+        <span class="s1">listUser</span><span class="s2">.</span><span class="s1">removeIf</span><span class="s2">(</span><span class="s1">u -&gt; u</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s4">&quot;id&quot;</span><span class="s2">).</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">id</span><span class="s2">));</span>
+        <span class="s0">return </span><span class="s4">&quot;redirect:/admin/customer&quot;</span><span class="s2">;</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>

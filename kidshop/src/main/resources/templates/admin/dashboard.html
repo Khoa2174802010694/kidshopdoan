@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Quản trị | Fashion Kids Admin</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Quicksand:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --primary-bg: #f4f7fe;
+            --sidebar-color: #ffffff;
+            --accent-color: #4318ff;
+            --text-main: #2b3674;
+            --text-secondary: #a3aed0;
+            --success-color: #05cd99;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            background: var(--sidebar-color);
+            position: fixed;
+            padding: 30px;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.02);
+            z-index: 100;
+        }
+
+        .brand-logo {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 50px;
+            display: block;
+            text-decoration: none;
+        }
+
+        .nav-link-custom {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-radius: 15px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            margin-bottom: 5px;
+        }
+
+        .nav-link-custom i { margin-right: 15px; font-size: 1.2rem; }
+        .nav-link-custom:hover, .nav-link-custom.active {
+            background: var(--primary-bg);
+            color: var(--accent-color);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            margin-left: 280px;
+            padding: 40px;
+        }
+
+        /* Stat Cards */
+        .stat-card-new {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            border: none;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+            transition: 0.3s;
+            height: 100%;
+        }
+        .stat-card-new:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.05); }
+
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-right: 20px;
+        }
+        .bg-soft-blue { background: #e9edf7; color: #4318ff; }
+        .bg-soft-green { background: #e6faf5; color: var(--success-color); }
+        .bg-soft-purple { background: #f4f1ff; color: #6d28d9; }
+
+        .stat-label { color: var(--text-secondary); font-size: 0.9rem; font-weight: 600; }
+        .stat-value { font-size: 1.6rem; font-weight: 800; color: var(--text-main); }
+
+        /* Table Card */
+        .table-card-custom {
+            background: white;
+            border-radius: 25px;
+            padding: 35px;
+            margin-top: 30px;
+            border: none;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+        }
+
+        .status-pill {
+            padding: 6px 16px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .user-profile {
+            background: white;
+            padding: 8px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .table thead th {
+            border: none;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a href="#" class="brand-logo fw-bold">FASHION <span style="color: #2b3674;">KIDS</span></a>
+
+    <div class="nav flex-column">
+        <a th:href="@{/admin/dashboard}" class="nav-link-custom active">
+            <i class="fa-solid fa-house-chimney"></i> Dashboard
+        </a>
+
+
+        <a th:href="@{/admin/product}" class="nav-link-custom">
+            <i class="fa-solid fa-boxes-stacked"></i> Sản phẩm
+        </a>
+
+        <a th:href="@{/admin/orders}" class="nav-link-custom">
+            <i class="fa-solid fa-cart-shopping"></i> Đơn hàng
+        </a>
+
+        <a th:href="@{/admin/coupons}" class="nav-link-custom">
+            <i class="fa-solid fa-ticket-simple"></i> Mã giảm giá
+        </a>
+
+        <a th:href="@{/admin/customer}" class="nav-link-custom">
+            <i class="fa-solid fa-users"></i> Khách hàng
+        </a>
+
+
+        <hr class="text-secondary opacity-25">
+
+        <a th:href="@{/client/index}" class="nav-link-custom text-danger">
+            <i class="fa-solid fa-right-from-bracket"></i> Thoát Admin
+        </a>
+    </div>
+</div>
+
+<div class="main-content">
+
+    <header class="admin-header">
+        <div>
+            <h6 class="text-secondary fw-bold mb-1">Trang quản trị</h6>
+            <h3 class="fw-bold m-0">Tổng quan hệ thống</h3>
+        </div>
+        <div class="user-profile">
+            <i class="fa-solid fa-bell text-secondary"></i>
+            <span class="fw-bold">Admin</span>
+            <img src="https://ui-avatars.com/api/?name=Admin&background=4318ff&color=fff" width="35" class="rounded-circle">
+        </div>
+    </header>
+
+    <div class="row g-4 animate__animated animate__fadeInUp">
+        <div class="col-md-4">
+            <a th:href="@{/admin/product}" style="text-decoration:none;">
+                <div class="stat-card-new">
+                    <div class="icon-circle bg-soft-blue"><i class="fa-solid fa-shirt"></i></div>
+                    <div>
+                        <div class="stat-label">Sản phẩm hiện có</div>
+                        <div class="stat-value" th:text="${totalProducts}">0</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card-new">
+                <div class="icon-circle bg-soft-purple"><i class="fa-solid fa-receipt"></i></div>
+                <div>
+                    <div class="stat-label">Tổng đơn hàng</div>
+                    <div class="stat-value" th:text="${totalOrders}">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="stat-card-new">
+                <div class="icon-circle bg-soft-green"><i class="fa-solid fa-wallet"></i></div>
+                <div>
+                    <div class="stat-label">Doanh thu thực tế</div>
+                    <div class="stat-value text-success" th:text="${#numbers.formatInteger(revenue, 1, 'POINT')} + '₫'">0₫</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-12">
+            <div class="table-card-custom animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold m-0"><i class="fa-solid fa-clock-rotate-left me-2 text-primary"></i>Đơn hàng mới nhất</h5>
+                    <a href="/admin/orders" class="btn btn-sm btn-light px-3 fw-bold rounded-pill">Xem tất cả</a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                        <tr>
+                            <th>Mã đơn</th>
+                            <th>Khách hàng</th>
+                            <th>Số điện thoại</th>
+                            <th>Ngày đặt</th>
+                            <th>Tổng tiền</th>
+                            <th>Trạng thái</th>
+                            <th class="text-center">Thao tác</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="ord : ${recentOrders}">
+                            <td><span class="fw-bold text-primary" th:text="'#' + ${ord.id}">#001</span></td>
+                            <td>
+                                <div class="fw-bold" th:text="${ord.customerName}">Tên KH</div>
+                            </td>
+                            <td th:text="${ord.phone}">090...</td>
+                            <td class="text-muted" th:text="${ord.date}">01/01/2024</td>
+                            <td>
+                                <span class="fw-800" th:text="${#numbers.formatInteger(ord.total, 1, 'POINT')} + '₫'"></span>
+                            </td>
+                            <td>
+                                <span th:if="${ord.status == 'APPROVED'}" class="status-pill bg-success bg-opacity-10 text-success">Hoàn thành</span>
+                                <span th:if="${ord.status == 'PENDING'}" class="status-pill bg-warning bg-opacity-10 text-warning">Đang chờ</span>
+                                <span th:if="${ord.status == 'CANCELLED'}" class="status-pill bg-danger bg-opacity-10 text-danger">Đã hủy</span>
+                            </td>
+                            <td class="text-center">
+                                <button class="btn btn-sm btn-outline-primary border-0 rounded-circle">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(recentOrders)}">
+                            <td colspan="7" class="text-center py-5 text-muted">Chưa có dữ liệu đơn hàng nào.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

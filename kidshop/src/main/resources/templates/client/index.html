@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Kids | Premium Baby Store 2026</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <style>
+        :root {
+            --primary-pink: #ff6b6b;
+            --soft-blue: #4ecdc4;
+            --sunny-yellow: #ffe66d;
+            --deep-dark: #2d3436;
+            --bg-light: #fffafa;
+            --glass: rgba(255, 255, 255, 0.9);
+        }
+
+        body { font-family: 'Quicksand', sans-serif; background-color: var(--bg-light); color: var(--deep-dark); scroll-behavior: smooth; overflow-x: hidden; }
+
+        /* --- CUSTOM SCROLLBAR --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: var(--primary-pink); border-radius: 10px; }
+
+        /* --- NAVBAR --- */
+        .navbar { background: var(--glass); backdrop-filter: blur(15px); padding: 15px 0; transition: all 0.4s; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .navbar.scrolled { padding: 8px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        .navbar-brand { font-family: 'Dancing Script', cursive; font-size: 2.4rem; color: var(--primary-pink) !important; }
+
+        .nav-link { font-weight: 700; color: var(--deep-dark) !important; position: relative; margin: 0 5px; }
+        .nav-link::after { content: ''; width: 0; height: 3px; background: var(--primary-pink); position: absolute; bottom: 0; left: 50%; transition: 0.3s; transform: translateX(-50%); border-radius: 10px; }
+        .nav-link:hover::after { width: 70%; }
+
+        /* --- MODERN SEARCH --- */
+        .search-container-modern { width: 220px; transition: all 0.4s; }
+        .search-input-group { position: relative; display: flex; align-items: center; }
+        .search-icon { position: absolute; left: 15px; color: #b2bec3; font-size: 0.9rem; z-index: 5; }
+        .modern-search-input {
+            width: 100%; padding: 8px 15px 8px 40px; border-radius: 50px;
+            border: 1.5px solid #eee; background: #f8f9fa; font-size: 0.85rem;
+            font-weight: 600; transition: all 0.3s;
+        }
+        .modern-search-input:focus {
+            outline: none; background: white; border-color: var(--primary-pink);
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.1); width: 280px;
+        }
+
+        #search-suggestions {
+            position: absolute; top: 120%; right: 0; width: 320px;
+            background: white; border-radius: 20px; display: none;
+            overflow: hidden; z-index: 1050; border: 1px solid rgba(0,0,0,0.05);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .suggestion-item {
+            padding: 12px 15px; display: flex; align-items: center;
+            gap: 12px; text-decoration: none; color: var(--deep-dark);
+            border-bottom: 1px solid #f8f9fa; transition: 0.2s;
+        }
+        .suggestion-item:hover { background: #fff5f6; }
+        .suggestion-item img { width: 45px; height: 45px; border-radius: 8px; object-fit: cover; }
+
+        /* --- HERO SLIDER --- */
+        .swiper { width: 100%; height: 85vh; min-height: 550px; border-radius: 0 0 100px 100px; }
+        .hero-section { position: relative; height: 100%; width: 100%; overflow: hidden; display: flex; align-items: center; }
+        .hero-content { position: relative; z-index: 10; max-width: 600px; padding-left: 8%; }
+        .hero-content h1 { font-size: 4.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 25px; }
+/* --- TỐI ƯU HÓA HÌNH ẢNH BANNER  --- */
+.hero-main-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Hình ảnh sẽ lấp đầy khung và giữ tỷ lệ */
+    object-position: center; /* Đảm bảo phần trung tâm của hình ảnh được hiển thị */
+    display: block;
+}
+        /* --- TRUST SECTION --- */
+        .trust-card { background: white; border-radius: 25px; padding: 25px; transition: 0.3s; border: none; box-shadow: 0 5px 20px rgba(0,0,0,0.02); height: 100%; }
+        .trust-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(255, 107, 107, 0.1); }
+        .trust-card i { font-size: 2.5rem; margin-bottom: 15px; color: var(--primary-pink); }
+
+        /* --- PRODUCT CARD --- */
+        .product-card { background: white; border-radius: 35px; padding: 12px; transition: all 0.5s; position: relative; border: none; overflow: hidden; height: 100%; }
+        .product-card:hover { transform: translateY(-15px); box-shadow: 0 30px 60px rgba(255, 107, 107, 0.15); }
+        .image-container { position: relative; border-radius: 25px; overflow: hidden; aspect-ratio: 1/1; }
+        .image-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
+        .product-card:hover .image-container img { transform: scale(1.1); }
+
+        .product-actions { position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; transition: 0.4s; opacity: 0; }
+        .product-card:hover .product-actions { bottom: 20px; opacity: 1; }
+        .action-btn { width: 45px; height: 45px; border-radius: 50%; background: white; color: var(--deep-dark); display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: 0.3s; }
+        .action-btn:hover { background: var(--primary-pink); color: white; }
+
+        .price-tag { font-size: 1.3rem; font-weight: 800; color: var(--primary-pink); }
+        .sold-count { font-size: 0.8rem; color: #a3aed0; font-weight: 600; }
+
+        .badge-status { position: absolute; top: 15px; left: 15px; z-index: 10; display: flex; flex-direction: column; gap: 5px; }
+        .badge-new { background: #e0f2fe; color: #0ea5e9; font-size: 0.7rem; padding: 5px 12px; border-radius: 10px; font-weight: 800; border: none; }
+        .badge-hot { background: #fff1f2; color: #f43f5e; font-size: 0.7rem; padding: 5px 12px; border-radius: 10px; font-weight: 800; border: none; }
+
+        /* --- FLOATING CONTACT --- */
+        .contact-group { position: fixed; bottom: 30px; right: 30px; z-index: 1000; display: flex; flex-direction: column; gap: 15px; }
+        #backToTop, .btn-contact { width: 50px; height: 50px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; transition: 0.3s; cursor: pointer; border: none; text-decoration: none; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        #backToTop { background: var(--primary-pink); display: none; }
+        .btn-zalo { background: #0084ff; font-size: 1.5rem; }
+        .btn-phone { background: #4caf50; font-size: 1.2rem; }
+
+        /* --- FOOTER --- */
+        .footer-pro { background: #ffffff; padding: 100px 0 20px; border-radius: 80px 80px 0 0; margin-top: 100px; box-shadow: 0 -20px 50px rgba(0,0,0,0.02); }
+        .footer-title { position: relative; padding-bottom: 12px; }
+        .footer-title::after { content: ''; position: absolute; bottom: 0; left: 0; width: 30px; height: 3px; background: var(--primary-pink); border-radius: 10px; }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links li a { color: #636e72; text-decoration: none; transition: 0.3s; font-size: 0.95rem; }
+        .footer-links li a:hover { color: var(--primary-pink); padding-left: 8px; }
+        .social-icon { width: 40px; height: 40px; background: #f8f9fa; color: var(--deep-dark); display: flex; align-items: center; justify-content: center; border-radius: 12px; text-decoration: none; transition: 0.3s; }
+        .social-icon:hover { background: var(--primary-pink); color: white; transform: translateY(-5px); }
+        .newsletter-box { display: flex; background: #f8f9fa; padding: 5px; border-radius: 50px; border: 1px solid #eee; }
+        .newsletter-box input { border: none; background: transparent; padding: 8px 20px; flex-grow: 1; font-size: 0.9rem; outline: none; }
+        .newsletter-box button { background: var(--primary-pink); color: white; border: none; padding: 8px 25px; border-radius: 50px; font-weight: 600; transition: 0.3s; }
+        .newsletter-box button:hover { background: #e84393; box-shadow: 0 5px 15px rgba(255, 107, 107, 0.3); }
+        .contact-info p i { width: 20px; }
+    </style>
+</head>
+<body>
+
+<div class="contact-group">
+    <a href="#" id="backToTop"><i class="fa-solid fa-arrow-up"></i></a>
+    <a href="tel:0900000000" class="btn-contact btn-phone"><i class="fa-solid fa-phone-volume animate__animated animate__tada animate__infinite"></i></a>
+    <a href="#" class="btn-contact btn-zalo"><i class="fa-brands fa-facebook-messenger"></i></a>
+</div>
+
+<nav class="navbar navbar-expand-lg sticky-top" id="mainNav">
+    <div class="container">
+        <a class="navbar-brand animate__animated animate__pulse animate__infinite" th:href="@{/client/index}">Fashion Kids</a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item"><a class="nav-link active" th:href="@{/client/index}">Trang Chủ</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Danh Mục</a>
+                    <ul class="dropdown-menu border-0 shadow-lg rounded-4">
+                        <li th:each="c : ${categories}">
+                            <a class="dropdown-item py-2" th:href="@{'/client/index?categoryId=' + ${c.id}}" th:text="${c.name}"></a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center gap-3">
+                <div class="search-container-modern position-relative d-none d-lg-block">
+                    <div class="search-input-group">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="main-search" class="modern-search-input" placeholder="Tìm đồ cho bé..." autocomplete="off">
+                    </div>
+                    <div id="search-suggestions" class="animate__animated animate__fadeIn"></div>
+                </div>
+
+                <div sec:authorize="isAuthenticated()">
+                    <a th:href="@{/client/cart}" class="btn btn-light rounded-pill px-3 position-relative shadow-sm">
+                        <i class="fa-solid fa-bag-shopping text-danger"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm">[[${session.cartCount ?: 0}]]</span>
+                    </a>
+                </div>
+                <div sec:authorize="isAnonymous()">
+                    <a th:href="@{/auth/login}" class="btn btn-light rounded-pill px-3 position-relative shadow-sm" onclick="return confirm('Vui lòng đăng nhập để xem giỏ hàng!')">
+                        <i class="fa-solid fa-bag-shopping text-muted"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary shadow-sm">0</span>
+                    </a>
+                </div>
+
+                <div sec:authorize="isAnonymous()">
+                    <a th:href="@{/auth/login}" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm">Đăng nhập</a>
+                </div>
+
+                <div sec:authorize="isAuthenticated()" class="dropdown">
+                    <div class="d-flex align-items-center gap-2 dropdown-toggle" data-bs-toggle="dropdown" style="cursor: pointer;">
+                        <img th:src="'https://ui-avatars.com/api/?name=' + ${#authentication.name} + '&background=ff6b6b&color=fff'"
+                             class="rounded-circle border border-2 border-white shadow-sm" width="40" height="40">
+                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-4 p-2 mt-3 animate__animated animate__fadeInUp">
+                        <li><a class="dropdown-item rounded-3 py-2" href="#"><i class="fa-solid fa-user-check me-2"></i>Tài khoản</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item rounded-3 py-2 text-danger" th:href="@{/logout}"><i class="fa-solid fa-power-off me-2"></i>Đăng xuất</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="swiper mySwiper h-100">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide">
+            <section class="hero-section" style="background: radial-gradient(circle, rgba(255,245,246,1) 0%, rgba(255,235,238,1) 100%);">
+                <div class="container h-100">
+                    <div class="row h-100 align-items-center">
+                        <div class="col-lg-6 col-md-7 hero-content animate__animated animate__fadeInLeft">
+                            <span class="badge bg-danger rounded-pill px-3 py-2 mb-3 shadow-sm">XUÂN HÈ 2026</span>
+                            <h1 class="text-dark fw-bold mb-3" style="font-size: 3.8rem; line-height: 1.2;">Bé Yêu Thêm <span style="color: var(--primary-pink)">Tự Tin</span><br> Mỗi Ngày</h1>
+                            <p class="text-muted fs-5 mb-5 pe-lg-5">Khám phá bộ sưu tập mới nhất với chất liệu Organic Cotton mềm mại, an toàn tuyệt đối cho làn da nhạy cảm của bé. Thiết kế hiện đại, màu sắc tươi tắn.</p>
+                            <div class="d-flex gap-3">
+                                <a href="#shop-main" class="btn btn-danger rounded-pill px-5 py-3 fw-bold shadow-lg transition-all hover-lift">Mua Ngay <i class="fas fa-shopping-bag ms-2"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-5 hero-image-container animate__animated animate__fadeInRight">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="swiper-slide">
+            <section class="hero-section" style="background: radial-gradient(circle, rgba(238,249,255,1) 0%, rgba(224,242,254,1) 100%);">
+                <div class="container h-100">
+                    <div class="row h-100 align-items-center">
+                        <div class="col-lg-6 col-md-7 hero-content">
+                            <span class="badge bg-primary rounded-pill px-3 py-2 mb-3 shadow-sm" style="background-color: var(--soft-blue) !important;">ƯU ĐÃI ĐẶC BIỆT</span>
+                            <h1 class="text-dark fw-bold mb-3" style="font-size: 3.8rem; line-height: 1.2;">Năng Động <br><span style="color: var(--soft-blue)">Tỏa Sáng</span> Cùng Bé</h1>
+                            <p class="text-muted fs-5 mb-5 pe-lg-5">Giảm giá lên đến <strong>30%</strong> cho toàn bộ các sản phẩm đồ chơi và phụ kiện Xuân Hè. Cơ hội tuyệt vời để mẹ sắm đồ xinh cho bé yêu mà không lo về giá.</p>
+                            <div class="d-flex gap-3">
+                                <a href="#shop-main" class="btn btn-info text-white rounded-pill px-5 py-3 fw-bold shadow-lg transition-all hover-lift" style="background: var(--soft-blue); border:none;">Nhận Ưu Đãi <i class="fas fa-tags ms-2"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-5 hero-image-container">
+                            <img src="https://images.unsplash.com/photo-1596464716127-f2a82984de30?q=80&w=1200&auto=format&fit=crop" class="img-fluid hero-main-img" alt="Fashion Kids Special Offer">
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="swiper-button-next swiper-nav-btn"></div>
+    <div class="swiper-button-prev swiper-nav-btn"></div>
+    <div class="swiper-pagination"></div>
+</div>
+
+<div class="container mt-n5 position-relative" style="z-index: 20; margin-top: -50px;">
+    <div class="row g-4 text-center justify-content-center">
+        <div class="col-md-3 col-6">
+            <div class="trust-card shadow-sm">
+                <i class="fa-solid fa-truck-fast"></i>
+                <h6 class="fw-bold">Giao Hàng Nhanh</h6>
+                <p class="small text-muted mb-0 d-none d-md-block">Miễn phí cho đơn từ 500k</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="trust-card shadow-sm">
+                <i class="fa-solid fa-shield-heart"></i>
+                <h6 class="fw-bold">Chất Lượng Cao</h6>
+                <p class="small text-muted mb-0 d-none d-md-block">100% Cotton an toàn</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="trust-card shadow-sm">
+                <i class="fa-solid fa-rotate-left"></i>
+                <h6 class="fw-bold">Dễ Đàng Đổi Trả</h6>
+                <p class="small text-muted mb-0 d-none d-md-block">Trong vòng 7 ngày</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="trust-card shadow-sm">
+                <i class="fa-solid fa-headset"></i>
+                <h6 class="fw-bold">Hỗ Trợ 24/7</h6>
+                <p class="small text-muted mb-0 d-none d-md-block">Tư vấn chọn size tận tâm</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main class="container py-5 mt-5" id="shop-main">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold" style="font-family: 'Dancing Script', cursive; font-size: 3rem;">Sản Phẩm <span style="color: var(--primary-pink)">Mới Nhất</span></h2>
+        <div style="width: 80px; height: 4px; background: var(--primary-pink); margin: 15px auto; border-radius: 10px;"></div>
+    </div>
+
+    <div class="row g-4 g-lg-5">
+        <div class="col-6 col-md-4 col-lg-3" th:each="p : ${products}">
+            <div class="product-card shadow-sm">
+                <div class="image-container">
+                    <div class="badge-status">
+                        <span th:if="${p.isNew}" class="badge-new shadow-sm">NEW</span>
+                        <span th:if="${p.sold > 50}" class="badge-hot shadow-sm">HOT</span>
+                    </div>
+
+                    <img th:src="@{'/uploads/' + ${p.image}}" onerror="this.src='https://images.unsplash.com/photo-1515488764276-beab7607c1e6?q=80&w=500'">
+
+                    <div class="product-actions">
+                        <a th:href="@{'/client/product/' + ${p.id}}" class="action-btn" title="Xem chi tiết"><i class="fa-solid fa-eye"></i></a>
+
+                        <a sec:authorize="isAuthenticated()" th:href="@{'/client/cart/add/' + ${p.id}}" class="action-btn" title="Thêm vào giỏ">
+                            <i class="fa-solid fa-cart-plus"></i>
+                        </a>
+                        <a sec:authorize="isAnonymous()" th:href="@{/auth/login}" class="action-btn" onclick="return confirm('Vui lòng đăng nhập để mua hàng!')" title="Đăng nhập để mua">
+                            <i class="fa-solid fa-lock text-muted"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="mt-3 px-2">
+                    <h5 class="fw-bold text-truncate" th:text="${p.name}">Sản phẩm</h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="price-tag" th:text="${#numbers.formatDecimal(p.price,0,'COMMA',0,'POINT')} + '₫'">0₫</div>
+                        <span class="sold-count">Đã bán: <span th:text="${p.sold ?: 0}">0</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<footer class="footer-pro">
+    <div class="container">
+        <div class="row g-4 mb-5">
+            <div class="col-lg-4 col-md-6">
+                <a class="navbar-brand d-block mb-3" href="#">Fashion Kids</a>
+                <p class="text-muted pe-lg-4">
+                    Thương hiệu thời trang trẻ em cao cấp, ra đời với sứ mệnh mang đến sự thoải mái và phong cách cho các thiên thần nhỏ. Chúng tôi chú trọng vào chất liệu Organic an toàn tuyệt đối.
+                </p>
+                <div class="social-links d-flex gap-3 mt-4">
+                    <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#" class="social-icon"><i class="fa-brands fa-tiktok"></i></a>
+                    <a href="#" class="social-icon"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6 col-6">
+                <h5 class="fw-bold mb-4 footer-title">Khám Phá</h5>
+                <ul class="list-unstyled footer-links">
+                    <li><a th:href="@{/client/index}">Trang chủ</a></li>
+                    <li><a href="#">Sản phẩm mới</a></li>
+                    <li><a href="#">Bộ sưu tập 2026</a></li>
+                    <li><a href="#">Khuyến mãi</a></li>
+                    <li><a href="#">Blog bé yêu</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-2 col-md-6 col-6">
+                <h5 class="fw-bold mb-4 footer-title">Hỗ Trợ</h5>
+                <ul class="list-unstyled footer-links">
+                    <li><a href="#">Chính sách đổi trả</a></li>
+                    <li><a href="#">Hướng dẫn chọn size</a></li>
+                    <li><a href="#">Chính sách bảo mật</a></li>
+                    <li><a href="#">Hình thức thanh toán</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <h5 class="fw-bold mb-4 footer-title">Đăng Ký Nhận Tin</h5>
+                <p class="small text-muted mb-3">Nhận ngay voucher giảm giá 10% cho đơn hàng đầu tiên!</p>
+                <div class="newsletter-box mb-4">
+                    <input type="email" placeholder="Email của mẹ...">
+                    <button type="button">Gửi</button>
+                </div>
+                <div class="contact-info">
+                    <p class="mb-2 small"><i class="fa-solid fa-location-dot me-2 text-danger"></i> 123 Đường Fashion, Quận 1, TP. Hồ Chí Minh</p>
+                    <p class="mb-2 small"><i class="fa-solid fa-phone me-2 text-danger"></i> 1900 6789</p>
+                    <p class="mb-0 small"><i class="fa-solid fa-envelope me-2 text-danger"></i> support@fashionkids.vn</p>
+                </div>
+            </div>
+        </div>
+
+        <hr class="opacity-10">
+
+        <div class="row align-items-center py-4">
+            <div class="col-md-6 text-center text-md-start">
+                <p class="text-muted small mb-0">© 2026 Fashion Kids Premium Store. Thiết kế bởi <strong>Em</strong>.</p>
+            </div>
+            <div class="col-md-6 text-center text-md-end mt-3 mt-md-0">
+                <img src="https://img.icons8.com/color/48/000000/visa.png" width="35" alt="visa">
+                <img src="https://img.icons8.com/color/48/000000/mastercard.png" width="35" alt="mastercard">
+                <img src="https://img.icons8.com/color/48/000000/paypal.png" width="35" alt="paypal">
+                <img src="https://img.icons8.com/color/48/000000/vietnamese-dong.png" width="35" alt="cod">
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<script th:inline="javascript">
+    const swiper = new Swiper(".mySwiper", {
+        loop: true,
+        autoplay: { delay: 4000, disableOnInteraction: false },
+        pagination: { el: ".swiper-pagination", clickable: true },
+        navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
+        effect: "fade",
+        fadeEffect: { crossFade: true }
+    });
+
+    window.addEventListener('scroll', function() {
+        const nav = document.getElementById('mainNav');
+        const btt = document.getElementById('backToTop');
+        if (window.scrollY > 50) {
+            nav.classList.add('scrolled');
+            btt.style.display = 'flex';
+        } else {
+            nav.classList.remove('scrolled');
+            btt.style.display = 'none';
+        }
+    });
+
+    const searchInput = document.getElementById('main-search');
+    const suggestionBox = document.getElementById('search-suggestions');
+
+    /*<![CDATA[*/
+    const allProducts = /*[[${products}]]*/ [];
+    /*]]>*/
+
+    searchInput.addEventListener('input', function() {
+        const query = this.value.toLowerCase().trim();
+        suggestionBox.innerHTML = '';
+        if (query.length < 1) { suggestionBox.style.display = 'none'; return; }
+
+        const matches = allProducts.filter(p => p.name.toLowerCase().includes(query)).slice(0, 5);
+
+        if (matches.length > 0) {
+            matches.forEach(p => {
+                const item = document.createElement('a');
+                item.href = `/client/product/${p.id}`;
+                item.className = 'suggestion-item';
+                const imgSrc = p.image ? `/uploads/${p.image}` : 'https://placehold.co/50';
+                const sold = p.sold || 0;
+
+                item.innerHTML = `
+                    <img src="${imgSrc}">
+                    <div class="flex-grow-1">
+                        <span class="name text-truncate" style="max-width: 180px; font-weight:700; display:block;">${p.name}</span>
+                        <div class="d-flex justify-content-between align-items-center mt-1">
+                            <span class="price" style="color:var(--primary-pink); font-size:0.8rem;">${p.price.toLocaleString('vi-VN')}₫</span>
+                            <span style="font-size: 0.7rem; color: #a3aed0;">Đã bán: ${sold}</span>
+                        </div>
+                    </div>
+                `;
+                suggestionBox.appendChild(item);
+            });
+            suggestionBox.style.display = 'block';
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target)) suggestionBox.style.display = 'none';
+    });
+</script>
+</body>
+</html>

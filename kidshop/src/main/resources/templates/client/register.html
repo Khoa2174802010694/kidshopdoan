@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tham gia đại gia đình | Fashion Kids</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary-color: #ff6b6b;
+            --secondary-color: #4ecdc4;
+            --accent-color: #ffe66d;
+            --text-dark: #2d3436;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            position: relative;
+            /* Background Gradient Chuyển Động từ trang Login */
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 50%, #fbc2eb 100%);
+            background-size: 400% 400%;
+            animation: gradientAnimation 12s ease infinite;
+            padding: 40px 0;
+        }
+
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Blobs trang trí */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.5;
+            z-index: 1;
+            animation: blobFloat 8s ease-in-out infinite;
+        }
+        .blob-1 { width: 300px; height: 300px; background: var(--secondary-color); top: -50px; right: -50px; }
+        .blob-2 { width: 400px; height: 400px; background: var(--accent-color); bottom: -100px; left: -100px; animation-delay: 2s; }
+
+        @keyframes blobFloat {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(20px, -20px); }
+        }
+
+        .register-wrapper {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 550px;
+            padding: 20px;
+        }
+
+        .register-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            padding: 45px;
+            border-radius: 40px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .brand-logo {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-weight: 700;
+            color: var(--text-dark);
+            text-align: center;
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        h3::after {
+            content: "✨";
+            position: absolute;
+            font-size: 1.2rem;
+            margin-left: 10px;
+        }
+
+        /* Input Styling */
+        .form-label {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #636e72;
+            margin-left: 15px;
+            margin-bottom: 5px;
+        }
+
+        .input-group-custom {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border-radius: 20px;
+            padding: 12px 20px 12px 45px;
+            border: 2px solid #f1f2f6;
+            background: rgba(255, 255, 255, 0.9);
+            transition: 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.25rem rgba(78, 205, 196, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #b2bec3;
+            transition: 0.3s;
+        }
+
+        .form-control:focus + .input-icon {
+            color: var(--secondary-color);
+        }
+
+        .btn-register {
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 15px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 15px;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(255, 107, 107, 0.2);
+        }
+
+        .btn-register:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(255, 107, 107, 0.3);
+            color: white;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 25px;
+            font-weight: 600;
+            color: #636e72;
+        }
+
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .error-msg {
+            background: #fff5f5;
+            color: #ff6b6b;
+            padding: 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--primary-color);
+        }
+
+        /* Trang trí Icon lơ lửng */
+        .deco-icon {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0.2;
+            z-index: 2;
+            animation: float 4s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+
+<div class="deco-icon" style="top: 10%; left: 5%;">🧸</div>
+<div class="deco-icon" style="bottom: 10%; right: 5%;">🍭</div>
+
+<div class="register-wrapper">
+    <div class="register-card">
+        <a th:href="@{/client/index}" class="brand-logo">
+            <i class="fa-solid fa-cloud-sun me-2"></i>FASHION KIDS
+        </a>
+
+        <h3>Đăng ký tài khoản mới</h3>
+
+        <div th:if="${error}" class="error-msg shadow-sm">
+            <i class="fa-solid fa-triangle-exclamation me-2"></i>
+            <span th:text="${error}"></span>
+        </div>
+
+        <form th:action="@{/auth/register}" method="post" th:object="${user}">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">Tên đăng nhập *</label>
+                    <div class="input-group-custom">
+                        <input type="text" th:field="*{username}" class="form-control" placeholder="username..." required>
+                        <i class="fa-solid fa-user-tag input-icon"></i>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Mật khẩu *</label>
+                    <div class="input-group-custom">
+                        <input type="password" th:field="*{password}" class="form-control" placeholder="********" required>
+                        <i class="fa-solid fa-lock input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Họ và tên</label>
+                    <div class="input-group-custom">
+                        <input type="text" th:field="*{name}" class="form-control" placeholder="Nguyễn Văn A">
+                        <i class="fa-solid fa-user input-icon"></i>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Số điện thoại</label>
+                    <div class="input-group-custom">
+                        <input type="text" th:field="*{phone}" class="form-control" placeholder="0901xxxxxx">
+                        <i class="fa-solid fa-phone input-icon"></i>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Địa chỉ Email</label>
+                    <div class="input-group-custom">
+                        <input type="email" th:field="*{email}" class="form-control" placeholder="vidu@gmail.com">
+                        <i class="fa-solid fa-envelope input-icon"></i>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-register">
+                Bắt đầu trải nghiệm ngay <i class="fa-solid fa-paper-plane ms-2"></i>
+            </button>
+        </form>
+
+        <div class="login-link">
+            Đã có tài khoản rồi? <a th:href="@{/auth/login}">Đăng nhập ngay</a>
+        </div>
+
+        <div class="text-center mt-4 border-top pt-3">
+            <a th:href="@{/client/index}" class="text-muted small text-decoration-none">
+                <i class="fa-solid fa-house-chimney me-1"></i> Quay về trang chủ
+            </a>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script th:inline="javascript">
+    window.onload = function() {
+        // Lấy thông báo từ RedirectAttributes của Spring Controller
+        const successMsg = [[${successMessage}]];
+        const errorMsg = [[${error}]]; // Lấy lỗi từ th:if="${error}" cũ của em
+
+        // Popup thành công
+        if (successMsg) {
+            Swal.fire({
+                title: '🎉 Chúc mừng em!',
+                text: successMsg,
+                icon: 'success',
+                confirmButtonText: 'Đăng nhập ngay',
+                confirmButtonColor: '#ff6b6b',
+                allowOutsideClick: false, // Ép người dùng nhấn nút để đi tiếp
+                backdrop: `rgba(78, 205, 196, 0.2)`
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // Tự động chuyển hướng sang trang login sau khi nhấn OK
+                    window.location.href = '/auth/login';
+                }
+            });
+        }
+
+        // Popup lỗi (nếu em muốn đổi từ dòng chữ đỏ sang popup cho xịn)
+        if (errorMsg) {
+            Swal.fire({
+                title: 'Ối, có lỗi rồi!',
+                text: errorMsg,
+                icon: 'error',
+                confirmButtonColor: '#2d3436'
+            });
+        }
+    };
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

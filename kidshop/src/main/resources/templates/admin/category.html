@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Danh Mục - Fashion Kids Admin</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Quicksand:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root { --pink: #ff9eb5; --warning: #ff9f1c; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; color: #334155; }
+        .navbar-brand { font-family: 'Quicksand', sans-serif; color: var(--pink) !important; font-weight: 700; }
+        .main-container { max-width: 800px; margin: 40px auto; }
+        .glass-card { background: white; border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); padding: 25px; border: none; }
+        .btn-primary { background-color: var(--pink); border: none; font-weight: 600; border-radius: 12px; padding: 10px 20px; }
+        .btn-primary:hover { background-color: #ff85a2; }
+        .btn-warning { border-radius: 12px; color: white !important; font-weight: 600; background-color: var(--warning); border: none; }
+        .category-name { font-weight: 600; color: #1e293b; }
+        .table thead { background-color: #f1f5f9; }
+        .table thead th { border: none; color: #64748b; font-size: 0.8rem; text-transform: uppercase; padding: 15px; }
+        .form-control { border-radius: 12px; padding: 12px; border: 1px solid #e2e8f0; }
+        .form-control:focus { border-color: var(--pink); box-shadow: 0 0 0 3px rgba(255, 158, 181, 0.2); }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-light bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/admin/category}">
+            <i class="fa-solid fa-tags me-2"></i> FASHION KIDS - CATEGORY
+        </a>
+        <div class="d-flex gap-2">
+            <a class="btn btn-sm btn-outline-secondary" th:href="@{/admin/dashboard}">Dashboard</a>
+            <a class="btn btn-sm btn-outline-secondary" th:href="@{/admin/product}">Product</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container main-container">
+    <div class="glass-card mb-4">
+        <h5 class="mb-4 fw-bold text-dark">
+            <i class="fa-solid fa-pen-to-square me-2 text-primary"></i>
+            <span th:text="${category.id == null ? 'Thêm mới danh mục' : 'Cập nhật danh mục'}">Cập nhật danh mục</span>
+        </h5>
+
+        <!-- Form gửi dữ liệu về Controller -->
+        <form th:action="@{/admin/category/save}" th:object="${category}" method="POST" class="row g-3">
+            <input type="hidden" th:field="*{id}">
+            <div class="col-md-9">
+                <input type="text" th:field="*{name}" class="form-control shadow-sm"
+                       placeholder="Nhập tên danh mục (vđ: Váy liền, Phụ kiện...)" required>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn w-100 shadow-sm"
+                        th:classappend="${category.id == null ? 'btn-primary' : 'btn-warning'}"
+                        th:text="${category.id == null ? 'Lưu lại' : 'Cập nhật'}">Lưu lại</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="glass-card shadow-sm">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                <tr>
+                    <th width="15%">STT</th>
+                    <th>Tên danh mục</th>
+                    <th width="25%" class="text-center">Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Lặp danh sách categories từ Java -->
+                <tr th:each="cat, state : ${categories}">
+                    <td><span class="text-muted fw-bold" th:text="'#' + ${state.count}">#1</span></td>
+                    <td><span class="category-name" th:text="${cat.name}">Tên danh mục</span></td>
+                    <td class="text-center">
+                        <a th:href="@{/admin/category/edit/{id}(id=${cat.id})}" class="btn btn-sm btn-outline-warning me-1">
+                            <i class="fa-solid fa-pen-nib"></i>
+                        </a>
+                        <a th:href="@{/admin/category/delete/{id}(id=${cat.id})}"
+                           class="btn btn-sm btn-outline-danger"
+                           onclick="return confirm('Xác nhận xóa danh mục này?')">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </a>
+                    </td>
+                </tr>
+                <!-- Hiển thị khi trống -->
+                <tr th:if="${#lists.isEmpty(categories)}">
+                    <td colspan="3" class="text-center py-4">Chưa có danh mục nào 🌸</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

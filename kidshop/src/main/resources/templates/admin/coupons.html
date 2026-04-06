@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Mã Giảm Giá | Fashion Kids Admin</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Quicksand:wght@700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+  <style>
+    :root {
+        --primary-bg: #f4f7fe;
+        --sidebar-color: #ffffff;
+        --accent-color: #4318ff;
+        --text-main: #2b3674;
+        --text-secondary: #a3aed0;
+        --coupon-bg: #eef2ff;
+        --coupon-text: #4318ff;
+    }
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: var(--primary-bg);
+        color: var(--text-main);
+    }
+
+    /* Sidebar cố định */
+    .sidebar {
+        width: 280px; height: 100vh; background: var(--sidebar-color);
+        position: fixed; padding: 30px; z-index: 100;
+        box-shadow: 10px 0 30px rgba(0,0,0,0.02);
+    }
+
+    .brand-logo {
+        font-family: 'Quicksand', sans-serif; font-size: 1.5rem;
+        color: var(--accent-color); margin-bottom: 50px;
+        display: block; text-decoration: none;
+    }
+
+    .nav-link-custom {
+        display: flex; align-items: center; padding: 15px 20px;
+        border-radius: 15px; color: var(--text-secondary);
+        text-decoration: none; font-weight: 600; transition: 0.3s; margin-bottom: 5px;
+    }
+
+    .nav-link-custom:hover, .nav-link-custom.active {
+        background: var(--primary-bg); color: var(--accent-color);
+    }
+
+    /* Nội dung chính */
+    .main-content { margin-left: 280px; padding: 40px; }
+
+    .glass-card {
+        background: white; border-radius: 25px; padding: 30px;
+        border: none; box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+    }
+
+    .form-control {
+        border-radius: 12px; border: 1px solid #e0e5f2;
+        padding: 12px 15px;
+    }
+
+    .form-control:focus {
+        box-shadow: 0 0 0 4px rgba(67, 24, 255, 0.1);
+        border-color: var(--accent-color);
+    }
+
+    /* Coupon Tag Style */
+    .coupon-tag {
+        background: var(--coupon-bg);
+        color: var(--coupon-text);
+        padding: 6px 14px;
+        border-radius: 10px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        border: 1px dashed var(--accent-color);
+        display: inline-block;
+    }
+
+    .btn-delete {
+        width: 38px; height: 38px; border-radius: 10px;
+        display: inline-flex; align-items: center; justify-content: center;
+        background: #fff5f5; color: #ee5d50; transition: 0.3s; border: none;
+    }
+
+    .btn-delete:hover { background: #ee5d50; color: white; }
+
+    .table thead th {
+        border: none; color: var(--text-secondary);
+        font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;
+        padding-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <a th:href="@{/admin/dashboard}" class="brand-logo fw-bold">FASHION <span style="color: #2b3674;">KIDS</span></a>
+  <div class="nav flex-column">
+    <a th:href="@{/admin/dashboard}" class="nav-link-custom"><i class="fa-solid fa-house-chimney me-3"></i> Dashboard</a>
+    <a th:href="@{/admin/category}" class="nav-link-custom"><i class="fa-solid fa-layer-group me-3"></i> Danh mục</a>
+    <a th:href="@{/admin/product}" class="nav-link-custom"><i class="fa-solid fa-boxes-stacked me-3"></i> Sản phẩm</a>
+    <a th:href="@{/admin/orders}" class="nav-link-custom"><i class="fa-solid fa-cart-shopping me-3"></i> Đơn hàng</a>
+    <a th:href="@{/admin/coupon}" class="nav-link-custom active"><i class="fa-solid fa-ticket-simple me-3"></i> Mã giảm giá</a>
+    <a th:href="@{/admin/customer}" class="nav-link-custom"><i class="fa-solid fa-users me-3"></i> Khách hàng</a>
+    <hr class="text-secondary opacity-25">
+    <a th:href="@{/client/index}" class="nav-link-custom text-danger"><i class="fa-solid fa-right-from-bracket me-3"></i> Thoát Admin</a>
+  </div>
+</div>
+
+<div class="main-content">
+  <header class="d-flex justify-content-between align-items-center mb-5">
+    <div>
+      <h6 class="text-secondary fw-bold mb-1">Khuyến mãi hệ thống</h6>
+      <h3 class="fw-bold m-0">Quản lý Voucher</h3>
+    </div>
+  </header>
+
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="glass-card animate__animated animate__fadeInLeft mb-4">
+        <h5 class="fw-bold mb-4"><i class="fa-solid fa-plus-circle me-2 text-primary"></i>Tạo mã mới</h5>
+
+        <form th:action="@{/admin/coupons/save}" th:object="${coupon}" method="POST">
+          <div class="mb-3">
+            <label class="small fw-bold text-secondary mb-2 d-block">Mã giảm giá (Code)</label>
+            <input type="text" th:field="*{code}" class="form-control" placeholder="VD: NHAPMOI20" required
+                   style="text-transform: uppercase;">
+          </div>
+
+          <div class="mb-4">
+            <label class="small fw-bold text-secondary mb-2 d-block">Phần trăm giảm (%)</label>
+            <div class="input-group">
+              <input type="number" th:field="*{discount}" class="form-control" placeholder="0" max="100" required>
+              <span class="input-group-text bg-white text-secondary" style="border-radius: 0 12px 12px 0;">%</span>
+            </div>
+          </div>
+
+          <button class="btn btn-primary w-100 py-3 fw-bold rounded-pill shadow-sm" style="background: var(--accent-color)">
+            <i class="fa-solid fa-ticket me-2"></i> Kích hoạt mã
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-lg-8">
+      <div class="glass-card animate__animated animate__fadeInRight">
+        <h5 class="fw-bold mb-4">Danh sách mã hiện có</h5>
+
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead>
+            <tr>
+              <th>Mã Voucher</th>
+              <th>Mức giảm</th>
+              <th class="text-center">Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="c : ${coupons}">
+              <td>
+                <span class="coupon-tag" th:text="${c.code}">CODE</span>
+              </td>
+              <td>
+                <div class="d-flex align-items-center">
+                  <div class="progress w-50 me-3" style="height: 8px; border-radius: 10px;">
+                    <div class="progress-bar bg-primary" role="progressbar"
+                         th:style="'width: ' + ${c.discount} + '%'"
+                         th:attr="aria-valuenow=${c.discount}" aria-valuemin="0" aria-valuemax="100"></div>
+                  </div>
+                  <span class="fw-bold text-dark" th:text="${c.discount + '%'}">20%</span>
+                </div>
+              </td>
+              <td class="text-center">
+                <a th:href="@{/admin/coupons/delete/{id}(id=${c.id})}"
+                   class="btn-delete"
+                   onclick="return confirm('Bạn có chắc chắn muốn xóa mã giảm giá này?')">
+                  <i class="fa-solid fa-trash-can"></i>
+                </a>
+              </td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(coupons)}">
+              <td colspan="3" class="text-center py-5 text-muted">
+                <i class="fa-solid fa-ticket-simple d-block mb-3 fs-1 opacity-25"></i>
+                Chưa có mã giảm giá nào được tạo.
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

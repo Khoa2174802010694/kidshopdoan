@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản Lý Đơn Hàng | Fashion Kids Admin</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Quicksand:wght@700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --primary-bg: #f4f7fe;
+            --sidebar-color: #ffffff;
+            --accent-color: #4318ff;
+            --text-main: #2b3674;
+            --text-secondary: #a3aed0;
+            --status-pending: #ff9f1c;
+            --status-approved: #05cd99;
+            --status-cancelled: #ee5d50;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-main);
+        }
+
+        .sidebar {
+            width: 280px; height: 100vh; background: var(--sidebar-color);
+            position: fixed; padding: 30px; z-index: 100;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.02);
+        }
+
+        .brand-logo {
+            font-family: 'Quicksand', sans-serif; font-size: 1.5rem;
+            color: var(--accent-color); margin-bottom: 50px;
+            display: block; text-decoration: none;
+        }
+
+        .nav-link-custom {
+            display: flex; align-items: center; padding: 15px 20px;
+            border-radius: 15px; color: var(--text-secondary);
+            text-decoration: none; font-weight: 600; transition: 0.3s; margin-bottom: 5px;
+        }
+
+        .nav-link-custom:hover, .nav-link-custom.active {
+            background: var(--primary-bg); color: var(--accent-color);
+        }
+
+        .main-content { margin-left: 280px; padding: 40px; }
+
+        .order-card {
+            background: white; border-radius: 25px; padding: 30px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
+        }
+
+        .status-pill {
+            padding: 8px 16px; border-radius: 12px;
+            font-size: 0.8rem; font-weight: 700; display: inline-flex; align-items: center;
+        }
+
+        .bg-pending { background: rgba(255, 159, 28, 0.1); color: var(--status-pending); }
+        .bg-approved { background: rgba(5, 205, 153, 0.1); color: var(--status-approved); }
+        .bg-cancelled { background: rgba(238, 93, 80, 0.1); color: var(--status-cancelled); }
+
+        .btn-action-circle {
+            width: 40px; height: 40px; border-radius: 12px;
+            display: inline-flex; align-items: center; justify-content: center;
+            transition: 0.3s; border: none;
+        }
+
+        .btn-approve { background: #e6faf5; color: #05cd99; }
+        .btn-approve:hover { background: #05cd99; color: white; }
+
+        .btn-cancel { background: #fff5f5; color: #ee5d50; }
+        .btn-cancel:hover { background: #ee5d50; color: white; }
+
+        .table thead th {
+            border: none; color: var(--text-secondary);
+            font-size: 0.8rem; text-transform: uppercase; padding-bottom: 20px;
+        }
+
+        /* Hiệu ứng mượt khi ẩn dòng */
+        tbody tr { transition: all 0.3s ease; }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <a th:href="@{/admin/dashboard}" class="brand-logo fw-bold">FASHION <span style="color: #2b3674;">KIDS</span></a>
+    <div class="nav flex-column">
+        <a th:href="@{/admin/dashboard}" class="nav-link-custom"><i class="fa-solid fa-house-chimney me-3"></i> Dashboard</a>
+        <a th:href="@{/admin/product}" class="nav-link-custom"><i class="fa-solid fa-boxes-stacked me-3"></i> Sản phẩm</a>
+        <a th:href="@{/admin/orders}" class="nav-link-custom active"><i class="fa-solid fa-cart-shopping me-3"></i> Đơn hàng</a>
+        <a th:href="@{/admin/coupons}" class="nav-link-custom"><i class="fa-solid fa-ticket-simple me-3"></i> Mã giảm giá</a>
+        <a th:href="@{/admin/customer}" class="nav-link-custom"><i class="fa-solid fa-users me-3"></i> Khách hàng</a>
+        <hr class="text-secondary opacity-25">
+        <a th:href="@{/client/index}" class="nav-link-custom text-danger"><i class="fa-solid fa-right-from-bracket me-3"></i> Thoát Admin</a>
+    </div>
+</div>
+
+<div class="main-content">
+    <header class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h6 class="text-secondary fw-bold mb-1">Quản lý bán hàng</h6>
+            <h3 class="fw-bold m-0">Xử lý đơn hàng</h3>
+        </div>
+        <div class="d-flex gap-3">
+            <div class="dropdown">
+                <button class="btn btn-white shadow-sm dropdown-toggle fw-600 rounded-pill px-4" type="button" id="filterBtn" data-bs-toggle="dropdown">
+                    <i class="fa-solid fa-filter me-2 text-primary"></i> <span id="currentFilter">Tất cả đơn</span>
+                </button>
+                <ul class="dropdown-menu border-0 shadow-sm">
+                    <li><a class="dropdown-item filter-opt" href="#" data-status="ALL">Tất cả đơn</a></li>
+                    <li><a class="dropdown-item filter-opt" href="#" data-status="PENDING">Chờ xử lý</a></li>
+                    <li><a class="dropdown-item filter-opt" href="#" data-status="APPROVED">Đã duyệt</a></li>
+                    <li><a class="dropdown-item filter-opt" href="#" data-status="CANCELLED">Đã hủy</a></li>
+                </ul>
+            </div>
+            <button onclick="window.location.reload()" class="btn btn-primary shadow-sm fw-600 rounded-pill px-4">
+                <i class="fa-solid fa-rotate me-2"></i> Làm mới
+            </button>
+        </div>
+    </header>
+
+    <div class="order-card animate__animated animate__fadeIn">
+        <div class="table-responsive">
+            <table class="table align-middle" id="orderTable">
+                <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Thông tin khách hàng</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th class="text-center">Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="o : ${orders}" th:data-status="${o.status}">
+                    <td><span class="fw-bold text-primary" th:text="'#' + ${o.id}">#001</span></td>
+                    <td>
+                        <div class="fw-bold" th:text="${o.customerName}">Tên Khách</div>
+                        <div class="text-muted small"><i class="fa-solid fa-phone fa-xs me-1"></i> <span th:text="${o.phone}"></span></div>
+                    </td>
+                    <td class="text-muted small" th:text="${o.date}">01/01/2024</td>
+                    <td><span class="fw-bold" style="font-size: 1.1rem;" th:text="${#numbers.formatInteger(o.total, 1, 'POINT')} + '₫'"></span></td>
+                    <td>
+                        <span th:if="${o.status == 'PENDING'}" class="status-pill bg-pending"><i class="fa-solid fa-spinner fa-spin me-2"></i> Chờ xử lý</span>
+                        <span th:if="${o.status == 'APPROVED'}" class="status-pill bg-approved"><i class="fa-solid fa-circle-check me-2"></i> Đã duyệt</span>
+                        <span th:if="${o.status == 'CANCELLED'}" class="status-pill bg-cancelled"><i class="fa-solid fa-circle-xmark me-2"></i> Đã hủy</span>
+                    </td>
+                    <td class="text-center">
+                        <div th:if="${o.status == 'PENDING'}" class="d-flex justify-content-center gap-2">
+                            <a th:href="@{/admin/orders/update(id=${o.id}, status='APPROVED')}" class="btn-action-circle btn-approve"><i class="fa-solid fa-check"></i></a>
+                            <a th:href="@{/admin/orders/update(id=${o.id}, status='CANCELLED')}" class="btn-action-circle btn-cancel"><i class="fa-solid fa-xmark"></i></a>
+                        </div>
+                        <div th:unless="${o.status == 'PENDING'}" class="text-secondary small italic"><i class="fa-solid fa-lock me-1"></i> Đã chốt</div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    // Logic lọc bằng JavaScript
+    document.querySelectorAll('.filter-opt').forEach(opt => {
+        opt.addEventListener('click', function(e) {
+            e.preventDefault();
+            const status = this.getAttribute('data-status'); // Lấy mã trạng thái (PENDING, APPROVED...)
+            const filterName = this.innerText; // Lấy tên hiển thị
+
+            // 1. Cập nhật chữ trên nút Dropdown
+            document.getElementById('currentFilter').innerText = filterName;
+
+            // 2. Lọc các dòng trong bảng
+            const rows = document.querySelectorAll('#orderTable tbody tr');
+            rows.forEach(row => {
+                const rowStatus = row.getAttribute('data-status');
+                if (status === 'ALL' || rowStatus === status) {
+                    row.style.display = ''; // Hiện
+                } else {
+                    row.style.display = 'none'; // Ẩn
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

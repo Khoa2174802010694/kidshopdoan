@@ -1,0 +1,285 @@
+<html>
+<head>
+<title>cart.html</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #d5b778;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bababa;}
+.s3 { color: #6aab73;}
+.s4 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+cart.html</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;!DOCTYPE </span><span class="s2">html</span><span class="s0">&gt;</span>
+<span class="s0">&lt;html </span><span class="s2">lang</span><span class="s3">=&quot;vi&quot;</span><span class="s0">&gt;</span>
+<span class="s0">&lt;head&gt;</span>
+    <span class="s0">&lt;meta </span><span class="s2">charset</span><span class="s3">=&quot;UTF-8&quot;</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;meta </span><span class="s2">name</span><span class="s3">=&quot;viewport&quot; </span><span class="s2">content</span><span class="s3">=&quot;width=device-width, initial-scale=1.0&quot;</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;title&gt;</span><span class="s1">Giỏ hàng cao cấp - Pink Theme</span><span class="s0">&lt;/title&gt;</span>
+    <span class="s4">&lt;!-- Bootstrap 5 &amp; Google Fonts --&gt;</span>
+    <span class="s0">&lt;link </span><span class="s2">href</span><span class="s3">=&quot;https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css&quot; </span><span class="s2">rel</span><span class="s3">=&quot;stylesheet&quot;</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;link </span><span class="s2">href</span><span class="s3">=&quot;https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap&quot; </span><span class="s2">rel</span><span class="s3">=&quot;stylesheet&quot;</span><span class="s0">&gt;</span>
+    <span class="s4">&lt;!-- Font Awesome cho Icon --&gt;</span>
+    <span class="s0">&lt;link </span><span class="s2">rel</span><span class="s3">=&quot;stylesheet&quot; </span><span class="s2">href</span><span class="s3">=&quot;https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css&quot;</span><span class="s0">&gt;</span>
+
+    <span class="s0">&lt;style&gt;</span>
+        <span class="s1">:root {</span>
+            <span class="s1">--primary-pink: #ff85a2;      /* Hồng vừa */</span>
+            <span class="s1">--soft-pink: #fff0f3;         /* Hồng rất nhạt cho hover */</span>
+            <span class="s1">--deep-pink: #f72585;         /* Hồng đậm cho text nhấn */</span>
+            <span class="s1">--pure-white: #ffffff;</span>
+            <span class="s1">--text-dark: #4a4a4a;</span>
+        <span class="s1">}</span>
+
+        <span class="s1">body {</span>
+            <span class="s1">background-color: #fffafb; /* Nền trắng hơi ánh hồng cực nhẹ */</span>
+            <span class="s1">font-family: 'Inter', sans-serif;</span>
+            <span class="s1">color: var(--text-dark);</span>
+        <span class="s1">}</span>
+
+        <span class="s1">.cart-container {</span>
+            <span class="s1">max-width: 950px;</span>
+            <span class="s1">margin: 40px auto;</span>
+        <span class="s1">}</span>
+
+        <span class="s1">/* Nút về trang chủ */</span>
+        <span class="s1">.btn-back-home {</span>
+            <span class="s1">color: var(--primary-pink);</span>
+            <span class="s1">text-decoration: none;</span>
+            <span class="s1">font-weight: 600;</span>
+            <span class="s1">transition: 0.3s;</span>
+            <span class="s1">display: inline-flex;</span>
+            <span class="s1">align-items: center;</span>
+            <span class="s1">margin-bottom: 20px;</span>
+        <span class="s1">}</span>
+        <span class="s1">.btn-back-home:hover {</span>
+            <span class="s1">color: var(--deep-pink);</span>
+            <span class="s1">transform: translateX(-5px);</span>
+        <span class="s1">}</span>
+
+        <span class="s1">h2.fw-bold { color: var(--deep-pink); }</span>
+
+        <span class="s1">.badge.bg-pink-tag {</span>
+            <span class="s1">background-color: var(--soft-pink);</span>
+            <span class="s1">color: var(--deep-pink);</span>
+            <span class="s1">border: 1px solid var(--primary-pink);</span>
+        <span class="s1">}</span>
+
+        <span class="s1">/* Card container - Ưu tiên màu trắng */</span>
+        <span class="s1">.cart-card {</span>
+            <span class="s1">border: 1px solid #fce4ec;</span>
+            <span class="s1">border-radius: 20px;</span>
+            <span class="s1">box-shadow: 0 8px 20px rgba(255, 133, 162, 0.08);</span>
+            <span class="s1">background: var(--pure-white);</span>
+            <span class="s1">overflow: hidden;</span>
+        <span class="s1">}</span>
+
+        <span class="s1">.cart-item {</span>
+            <span class="s1">transition: all 0.3s ease;</span>
+            <span class="s1">border-bottom: 1px solid #fce4ec;</span>
+            <span class="s1">padding: 25px;</span>
+            <span class="s1">background: var(--pure-white);</span>
+        <span class="s1">}</span>
+        <span class="s1">.cart-item:last-child { border-bottom: none; }</span>
+        <span class="s1">.cart-item:hover { background: var(--soft-pink); }</span>
+
+        <span class="s1">.product-img {</span>
+            <span class="s1">width: 90px;</span>
+            <span class="s1">height: 90px;</span>
+            <span class="s1">object-fit: cover;</span>
+            <span class="s1">border-radius: 12px;</span>
+            <span class="s1">border: 1px solid #eee;</span>
+        <span class="s1">}</span>
+
+        <span class="s1">/* Nút tăng giảm số lượng */</span>
+        <span class="s1">.qty-btn {</span>
+            <span class="s1">width: 30px;</span>
+            <span class="s1">height: 30px;</span>
+            <span class="s1">border-radius: 8px;</span>
+            <span class="s1">border: 1px solid var(--primary-pink);</span>
+            <span class="s1">background: var(--pure-white);</span>
+            <span class="s1">color: var(--primary-pink);</span>
+            <span class="s1">display: flex;</span>
+            <span class="s1">align-items: center;</span>
+            <span class="s1">justify-content: center;</span>
+            <span class="s1">cursor: pointer;</span>
+        <span class="s1">}</span>
+        <span class="s1">.qty-btn:hover {</span>
+            <span class="s1">background: var(--primary-pink);</span>
+            <span class="s1">color: white;</span>
+        <span class="s1">}</span>
+
+        <span class="s1">/* Nút xóa */</span>
+        <span class="s1">.btn-remove {</span>
+            <span class="s1">color: #d1d1d1;</span>
+            <span class="s1">cursor: pointer;</span>
+            <span class="s1">transition: 0.2s;</span>
+            <span class="s1">margin-left: 15px;</span>
+        <span class="s1">}</span>
+        <span class="s1">.btn-remove:hover { color: var(--deep-pink); }</span>
+
+        <span class="s1">/* Hộp tổng tiền */</span>
+        <span class="s1">.summary-box {</span>
+            <span class="s1">background: var(--pure-white);</span>
+            <span class="s1">border-radius: 20px;</span>
+            <span class="s1">padding: 25px;</span>
+            <span class="s1">box-shadow: 0 8px 20px rgba(255, 133, 162, 0.08);</span>
+            <span class="s1">border: 1px solid #fce4ec;</span>
+        <span class="s1">}</span>
+
+        <span class="s1">.btn-checkout {</span>
+            <span class="s1">background: var(--primary-pink);</span>
+            <span class="s1">border: none;</span>
+            <span class="s1">color: white;</span>
+            <span class="s1">padding: 12px;</span>
+            <span class="s1">border-radius: 12px;</span>
+            <span class="s1">font-weight: 700;</span>
+            <span class="s1">width: 100%;</span>
+            <span class="s1">transition: 0.3s;</span>
+        <span class="s1">}</span>
+        <span class="s1">.btn-checkout:hover {</span>
+            <span class="s1">background: var(--deep-pink);</span>
+            <span class="s1">box-shadow: 0 4px 12px rgba(247, 37, 133, 0.2);</span>
+        <span class="s1">}</span>
+
+        <span class="s1">.empty-cart-ui {</span>
+            <span class="s1">text-align: center;</span>
+            <span class="s1">padding: 60px;</span>
+            <span class="s1">background: white;</span>
+            <span class="s1">border-radius: 20px;</span>
+        <span class="s1">}</span>
+    <span class="s0">&lt;/style&gt;</span>
+<span class="s0">&lt;/head&gt;</span>
+
+<span class="s0">&lt;body&gt;</span>
+
+<span class="s0">&lt;div </span><span class="s2">class</span><span class="s3">=&quot;container cart-container&quot;</span><span class="s0">&gt;</span>
+    <span class="s4">&lt;!-- Nút về trang chủ mới thêm --&gt;</span>
+    <span class="s0">&lt;a </span><span class="s2">href</span><span class="s3">=&quot;index&quot; </span><span class="s2">class</span><span class="s3">=&quot;btn-back-home&quot;</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;i </span><span class="s2">class</span><span class="s3">=&quot;fa-solid fa-chevron-left me-2&quot;</span><span class="s0">&gt;&lt;/i&gt; </span><span class="s1">Tiếp tục mua sắm</span>
+    <span class="s0">&lt;/a&gt;</span>
+
+    <span class="s0">&lt;div </span><span class="s2">class</span><span class="s3">=&quot;d-flex justify-content-between align-items-center mb-4&quot;</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;h2 </span><span class="s2">class</span><span class="s3">=&quot;fw-bold m-0&quot;</span><span class="s0">&gt;&lt;i </span><span class="s2">class</span><span class="s3">=&quot;fa-solid fa-heart me-2&quot;</span><span class="s0">&gt;&lt;/i&gt;</span><span class="s1">Giỏ hàng của bạn</span><span class="s0">&lt;/h2&gt;</span>
+        <span class="s0">&lt;span </span><span class="s2">class</span><span class="s3">=&quot;badge bg-pink-tag rounded-pill px-3 py-2&quot; </span><span class="s2">id</span><span class="s3">=&quot;cartCount&quot;</span><span class="s0">&gt;</span><span class="s1">0 sản phẩm</span><span class="s0">&lt;/span&gt;</span>
+    <span class="s0">&lt;/div&gt;</span>
+
+    <span class="s0">&lt;div </span><span class="s2">class</span><span class="s3">=&quot;row g-4&quot;</span><span class="s0">&gt;</span>
+        <span class="s0">&lt;div </span><span class="s2">class</span><span class="s3">=&quot;col-lg-8&quot;</span><span class="s0">&gt;</span>
+            <span class="s0">&lt;div </span><span class="s2">class</span><span class="s3">=&quot;cart-card&quot; </span><span class="s2">id</span><span class="s3">=&quot;cartBody&quot;</span><span class="s0">&gt;</span>
+                <span class="s4">&lt;!-- Nội dung render --&gt;</span>
+            <span class="s0">&lt;/div&gt;</span>
+        <span class="s0">&lt;/div&gt;</span>
+
+        <span class="s0">&lt;div </span><span class="s2">class</span><span class="s3">=&quot;col-lg-4&quot;</span><span class="s0">&gt;</span>
+            <span class="s0">&lt;div </span><span class="s2">class</span><span class="s3">=&quot;summary-box&quot;</span><span class="s0">&gt;</span>
+                <span class="s0">&lt;h5 </span><span class="s2">class</span><span class="s3">=&quot;fw-bold mb-4&quot;</span><span class="s0">&gt;</span><span class="s1">Tổng đơn hàng</span><span class="s0">&lt;/h5&gt;</span>
+                <span class="s0">&lt;div </span><span class="s2">class</span><span class="s3">=&quot;d-flex justify-content-between mb-2&quot;</span><span class="s0">&gt;</span>
+                    <span class="s0">&lt;span </span><span class="s2">class</span><span class="s3">=&quot;text-muted&quot;</span><span class="s0">&gt;</span><span class="s1">Tạm tính:</span><span class="s0">&lt;/span&gt;</span>
+                    <span class="s0">&lt;span </span><span class="s2">id</span><span class="s3">=&quot;subtotal&quot; </span><span class="s2">class</span><span class="s3">=&quot;fw-bold&quot;</span><span class="s0">&gt;</span><span class="s1">0₫</span><span class="s0">&lt;/span&gt;</span>
+                <span class="s0">&lt;/div&gt;</span>
+                <span class="s0">&lt;div </span><span class="s2">class</span><span class="s3">=&quot;d-flex justify-content-between mb-3&quot;</span><span class="s0">&gt;</span>
+                    <span class="s0">&lt;span </span><span class="s2">class</span><span class="s3">=&quot;text-muted&quot;</span><span class="s0">&gt;</span><span class="s1">Giao hàng:</span><span class="s0">&lt;/span&gt;</span>
+                    <span class="s0">&lt;span </span><span class="s2">class</span><span class="s3">=&quot;text-success fw-bold&quot;</span><span class="s0">&gt;</span><span class="s1">Miễn phí</span><span class="s0">&lt;/span&gt;</span>
+                <span class="s0">&lt;/div&gt;</span>
+                <span class="s0">&lt;hr </span><span class="s2">style</span><span class="s3">=&quot;border-top: 1px dashed #ff85a2;&quot;</span><span class="s0">&gt;</span>
+                <span class="s0">&lt;div </span><span class="s2">class</span><span class="s3">=&quot;d-flex justify-content-between mb-4&quot;</span><span class="s0">&gt;</span>
+                    <span class="s0">&lt;span </span><span class="s2">class</span><span class="s3">=&quot;fw-bold&quot;</span><span class="s0">&gt;</span><span class="s1">Tổng cộng:</span><span class="s0">&lt;/span&gt;</span>
+                    <span class="s0">&lt;h4 </span><span class="s2">style</span><span class="s3">=&quot;color: var(--deep-pink);&quot; </span><span class="s2">class</span><span class="s3">=&quot;fw-bold&quot; </span><span class="s2">id</span><span class="s3">=&quot;total&quot;</span><span class="s0">&gt;</span><span class="s1">0₫</span><span class="s0">&lt;/h4&gt;</span>
+                <span class="s0">&lt;/div&gt;</span>
+                <span class="s0">&lt;button </span><span class="s2">class</span><span class="s3">=&quot;btn-checkout&quot;</span><span class="s0">&gt;</span>
+                    <span class="s1">ĐẶT HÀNG NGAY </span><span class="s0">&lt;i </span><span class="s2">class</span><span class="s3">=&quot;fa-solid fa-paper-plane ms-2&quot;</span><span class="s0">&gt;&lt;/i&gt;</span>
+                <span class="s0">&lt;/button&gt;</span>
+            <span class="s0">&lt;/div&gt;</span>
+        <span class="s0">&lt;/div&gt;</span>
+    <span class="s0">&lt;/div&gt;</span>
+<span class="s0">&lt;/div&gt;</span>
+
+<span class="s0">&lt;script&gt;</span>
+    <span class="s1">// Dữ liệu mẫu</span>
+    <span class="s1">let cart = JSON.parse(localStorage.getItem(&quot;cart&quot;)) || [</span>
+        <span class="s1">{id: 1, name: &quot;Váy lụa hồng Pastel&quot;, price: 450000, qty: 1, image: &quot;https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&amp;w=400&amp;auto=format&amp;fit=crop&quot;},</span>
+        <span class="s1">{id: 2, name: &quot;Túi xách ngọc trai&quot;, price: 890000, qty: 1, image: &quot;https://images.unsplash.com/photo-1584917865442-de89df76afd3?q=80&amp;w=400&amp;auto=format&amp;fit=crop&quot;}</span>
+    <span class="s1">];</span>
+
+    <span class="s1">function render() {</span>
+        <span class="s1">const cartBody = document.getElementById(&quot;cartBody&quot;);</span>
+        <span class="s1">const cartCount = document.getElementById(&quot;cartCount&quot;);</span>
+
+        <span class="s1">if (cart.length === 0) {</span>
+            <span class="s1">cartBody.innerHTML = `</span>
+                <span class="s1">&lt;div class=&quot;empty-cart-ui&quot;&gt;</span>
+                    <span class="s1">&lt;i class=&quot;fa-solid fa-bag-shopping fa-4x mb-3&quot; style=&quot;color: #ffe5ec;&quot;&gt;&lt;/i&gt;</span>
+                    <span class="s1">&lt;h5 class=&quot;text-muted&quot;&gt;Giỏ hàng đang chờ bạn đấy!&lt;/h5&gt;</span>
+                    <span class="s1">&lt;a href=&quot;index&quot; class=&quot;btn btn-sm mt-3 px-4&quot; style=&quot;background: var(--primary-pink); color: white;&quot;&gt;Mua sắm ngay&lt;/a&gt;</span>
+                <span class="s1">&lt;/div&gt;`;</span>
+            <span class="s1">updateTotals(0);</span>
+            <span class="s1">cartCount.innerText = &quot;0 sản phẩm&quot;;</span>
+            <span class="s1">return;</span>
+        <span class="s1">}</span>
+
+        <span class="s1">cartBody.innerHTML = cart.map(item =&gt; `</span>
+            <span class="s1">&lt;div class=&quot;cart-item d-flex align-items-center&quot;&gt;</span>
+                <span class="s1">&lt;img src=&quot;${item.image}&quot; class=&quot;product-img me-3&quot; alt=&quot;${item.name}&quot;&gt;</span>
+                <span class="s1">&lt;div class=&quot;flex-grow-1&quot;&gt;</span>
+                    <span class="s1">&lt;h6 class=&quot;fw-bold mb-1&quot; style=&quot;font-size: 0.95rem;&quot;&gt;${item.name}&lt;/h6&gt;</span>
+                    <span class="s1">&lt;small class=&quot;text-muted&quot;&gt;${item.price.toLocaleString()}₫&lt;/small&gt;</span>
+                <span class="s1">&lt;/div&gt;</span>
+                <span class="s1">&lt;div class=&quot;d-flex align-items-center mx-3&quot;&gt;</span>
+                    <span class="s1">&lt;button class=&quot;qty-btn&quot; onclick=&quot;change(${item.id},-1)&quot;&gt;&lt;i class=&quot;fa-solid fa-minus&quot;&gt;&lt;/i&gt;&lt;/button&gt;</span>
+                    <span class="s1">&lt;span class=&quot;mx-3 fw-bold&quot;&gt;${item.qty}&lt;/span&gt;</span>
+                    <span class="s1">&lt;button class=&quot;qty-btn&quot; onclick=&quot;change(${item.id},1)&quot;&gt;&lt;i class=&quot;fa-solid fa-plus&quot;&gt;&lt;/i&gt;&lt;/button&gt;</span>
+                <span class="s1">&lt;/div&gt;</span>
+                <span class="s1">&lt;div class=&quot;text-end&quot; style=&quot;min-width: 110px;&quot;&gt;</span>
+                    <span class="s1">&lt;span class=&quot;fw-bold&quot; style=&quot;color: var(--deep-pink);&quot;&gt;${(item.price * item.qty).toLocaleString()}₫&lt;/span&gt;</span>
+                <span class="s1">&lt;/div&gt;</span>
+                <span class="s1">&lt;div class=&quot;btn-remove&quot; onclick=&quot;removeItem(${item.id})&quot;&gt;</span>
+                    <span class="s1">&lt;i class=&quot;fa-solid fa-trash-can&quot;&gt;&lt;/i&gt;</span>
+                <span class="s1">&lt;/div&gt;</span>
+            <span class="s1">&lt;/div&gt;</span>
+        <span class="s1">`).join(&quot;&quot;);</span>
+
+        <span class="s1">const total = cart.reduce((a, b) =&gt; a + b.price * b.qty, 0);</span>
+        <span class="s1">updateTotals(total);</span>
+        <span class="s1">cartCount.innerText = `${cart.length} sản phẩm`;</span>
+    <span class="s1">}</span>
+
+    <span class="s1">function updateTotals(total) {</span>
+        <span class="s1">document.getElementById(&quot;subtotal&quot;).innerText = total.toLocaleString() + &quot;₫&quot;;</span>
+        <span class="s1">document.getElementById(&quot;total&quot;).innerText = total.toLocaleString() + &quot;₫&quot;;</span>
+    <span class="s1">}</span>
+
+    <span class="s1">function change(id, d) {</span>
+        <span class="s1">const item = cart.find(i =&gt; i.id == id);</span>
+        <span class="s1">if (item) {</span>
+            <span class="s1">item.qty += d;</span>
+            <span class="s1">if (item.qty &lt;= 0) return removeItem(id);</span>
+            <span class="s1">save();</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s1">function removeItem(id) {</span>
+        <span class="s1">if(confirm(&quot;Quý khách muốn bỏ sản phẩm này khỏi giỏ hàng ạ?&quot;)) {</span>
+            <span class="s1">cart = cart.filter(i =&gt; i.id != id);</span>
+            <span class="s1">save();</span>
+        <span class="s1">}</span>
+    <span class="s1">}</span>
+
+    <span class="s1">function save() {</span>
+        <span class="s1">localStorage.setItem(&quot;cart&quot;, JSON.stringify(cart));</span>
+        <span class="s1">render();</span>
+    <span class="s1">}</span>
+
+    <span class="s1">render();</span>
+<span class="s0">&lt;/script&gt;</span>
+
+<span class="s0">&lt;/body&gt;</span>
+<span class="s0">&lt;/html&gt;</span></pre>
+</body>
+</html>
